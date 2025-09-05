@@ -1,15 +1,54 @@
 .burger_ingredients {
+  position: relative;
   display: flex;
   flex-direction: column;
   max-width: 600px;
+  height: 100%;
   color: var(--text-primary-color);
   font-family: 'Jet Brains Mono', serif;
 }
 
 .menu {
+  position: sticky;
+  top: 0;
   display: flex;
   margin: 0;
   padding: 0;
   text-align: center;
   list-style-type: none;
+}
+
+.burger_categories_container {
+  padding: 10px;
+  background-color: #1a1a2e;
+}
+
+.ingredients_list {
+  padding-right: 16px;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+}
+
+.ingredients_list::-webkit-scrollbar {
+  width: 8px;
+  background-color: #2f2f37;
+}
+
+.ingredients_list::-webkit-scrollbar-thumb {
+  background-color: #8585ad;
+  border-radius: 4px;
+}
+
+.category_title {
+  margin-bottom: 24px;
+  color: #f2f2f3;
+  font-weight: 700;
+  font-size: 24px;
+}
+
+.ingredients_grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 32px 24px;
+  margin-bottom: 60px;
 }

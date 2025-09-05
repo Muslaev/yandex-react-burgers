@@ -1,0 +1,40 @@
+.burger_constructor {
+  display: flex;
+  flex-direction: column;
+  width: 600px;
+  padding-bottom: 20px;
+  color: var(--text-primary-color);
+}
+
+.external {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  width: 568px;
+}
+
+.internal {
+  align-items: end;
+  max-height: 465px;
+  overflow-y: auto;
+}
+
+.ingredientElem {
+  display: flex;
+  align-items: center;
+}
+
+.orderInfo {
+  display: flex;
+  align-items: center;
+}
+
+.orderInfoPrice {
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+}
+
+.orderInfoButton {
+  float: right;
+}

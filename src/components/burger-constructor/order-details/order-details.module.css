@@ -1,0 +1,31 @@
+.orderId {
+  text-align: center;
+}
+
+.iconBox {
+  width: 107px;
+  height: 102px;
+  margin-right: auto;
+  margin-left: auto;
+  background: url('../../../images/done.svg');
+}
+
+.textOrder {
+  font-weight: 700;
+  font-size: 24px;
+  font-family: 'Jet Brains Mono', serif;
+  line-height: 30px;
+  text-align: center;
+}
+
+.textBottom {
+  font-weight: 400;
+  font-size: 16px;
+  font-family: 'Jet Brains Mono', serif;
+  line-height: 24px;
+  text-align: center;
+}
+
+.bottomColor {
+  color: #8585ad;
+}

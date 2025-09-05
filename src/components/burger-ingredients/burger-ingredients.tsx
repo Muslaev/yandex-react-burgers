@@ -1,4 +1,7 @@
 import { Tab } from '@krgaa/react-developer-burger-ui-components';
+import { useState, useRef } from 'react';
+
+import { BurgerIngredientCard } from './burger-ingredient-card/burger-ingredient-card';
 
 import type { TIngredient } from '@utils/types';
 
@@ -11,41 +14,93 @@ type TBurgerIngredientsProps = {
 export const BurgerIngredients = ({
   ingredients,
 }: TBurgerIngredientsProps): React.JSX.Element => {
-  console.log(ingredients);
+  const [currentTab, setCurrentTab] = useState<'bun' | 'sauce' | 'main'>('bun');
 
+  const bunRef = useRef<HTMLDivElement>(null);
+  const sauceRef = useRef<HTMLDivElement>(null);
+  const mainRef = useRef<HTMLDivElement>(null);
+  const ingredientsListRef = useRef<HTMLDivElement>(null);
+
+  const refs = {
+    bun: bunRef,
+    sauce: sauceRef,
+    main: mainRef,
+  };
+
+  const groupedIngredients = ingredients.reduce(
+    (acc, ing) => {
+      if (ing.type === 'bun' || ing.type === 'sauce' || ing.type === 'main') {
+        if (!acc[ing.type]) acc[ing.type] = [];
+        acc[ing.type].push(ing);
+      }
+      return acc;
+    },
+    {} as Record<'bun' | 'sauce' | 'main', TIngredient[]>
+  );
+
+  const handleTabClick = (tab: 'bun' | 'sauce' | 'main'): void => {
+    setCurrentTab(tab);
+    const targetRef = refs[tab].current;
+    const listRef = ingredientsListRef.current;
+
+    if (targetRef && listRef) {
+      const targetOffset = targetRef.offsetTop - listRef.offsetTop; // Смещение относительно .ingredients_list
+      listRef.scrollTo({
+        top: targetOffset,
+        behavior: 'smooth',
+      });
+    }
+  };
+
+  const getCategoryTitle = (
+    type: 'bun' | 'sauce' | 'main'
+  ): 'Булки' | 'Начинки' | 'Соусы' => {
+    return type === 'bun' ? 'Булки' : type === 'main' ? 'Начинки' : 'Соусы';
+  };
+
+  //console.log(groupedIngredients);
   return (
     <section className={styles.burger_ingredients}>
       <nav>
         <ul className={styles.menu}>
           <Tab
             value="bun"
-            active={true}
-            onClick={() => {
-              /* TODO */
-            }}
+            active={currentTab === 'bun'}
+            onClick={() => handleTabClick('bun')}
           >
             Булки
           </Tab>
           <Tab
             value="main"
-            active={false}
-            onClick={() => {
-              /* TODO */
-            }}
+            active={currentTab === 'main'}
+            onClick={() => handleTabClick('main')}
           >
             Начинки
           </Tab>
           <Tab
             value="sauce"
-            active={false}
-            onClick={() => {
-              /* TODO */
-            }}
+            active={currentTab === 'sauce'}
+            onClick={() => handleTabClick('sauce')}
           >
             Соусы
           </Tab>
         </ul>
       </nav>
+      <div className={styles.ingredients_list} ref={ingredientsListRef}>
+        {(['bun', 'main', 'sauce'] as const).map(
+          (type) =>
+            groupedIngredients[type] && (
+              <div key={type} ref={refs[type]}>
+                <h2 className={styles.category_title}>{getCategoryTitle(type)}</h2>
+                <div className={styles.ingredients_grid}>
+                  {groupedIngredients[type].map((ing) => (
+                    <BurgerIngredientCard key={ing._id} ingredient={ing} count={0} />
+                  ))}
+                </div>
+              </div>
+            )
+        )}
+      </div>
     </section>
   );
 };
