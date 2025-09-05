@@ -1,40 +1,34 @@
 .burger_constructor {
   display: flex;
   flex-direction: column;
-  width: 600px;
-  padding-bottom: 20px;
-  color: var(--text-primary-color);
+  height: 100%;
+  font-family: 'Jet Brains Mono', serif;
 }
 
-.external {
+.outter {
   display: flex;
-  flex-flow: column;
   align-items: center;
-  width: 568px;
 }
 
-.internal {
-  align-items: end;
-  max-height: 465px;
+.inner {
+  align-items: flex-end;
   overflow-y: auto;
 }
 
-.ingredientElem {
+.element {
   display: flex;
   align-items: center;
 }
 
-.orderInfo {
+.order {
   display: flex;
+  justify-content: flex-end;
   align-items: center;
+  width: 100%;
 }
 
-.orderInfoPrice {
+.price {
   display: flex;
   flex-flow: row;
   align-items: center;
-}
-
-.orderInfoButton {
-  float: right;
 }

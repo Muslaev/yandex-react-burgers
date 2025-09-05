@@ -27,6 +27,8 @@ export const App = (): React.JSX.Element => {
     ingredients: [],
   });
 
+  const [errorMessage, setErrorMessage] = useState<string>('');
+
   // URL для запроса ингредиентов
   const ingredientsURL = 'https://norma.nomoreparties.space/api/ingredients';
 
@@ -37,9 +39,7 @@ export const App = (): React.JSX.Element => {
       if (!response.ok) {
         throw new Error(`HTTP Error: ${response.status}`);
       }
-      // Получаем данные как unknown и проверяем их структуру
       const rawData: unknown = await response.json();
-      // Проверяем, соответствует ли структура данных интерфейсу ApiResponse
       if (
         rawData &&
         typeof rawData === 'object' &&
@@ -63,9 +63,9 @@ export const App = (): React.JSX.Element => {
     } catch (e) {
       setIngredientsRequest({ ...ingredientsRequest, hasError: true, isLoading: false });
       if (e instanceof Error) {
-        alert(e.message);
+        setErrorMessage(e.message);
       } else {
-        alert('Unknown error');
+        setErrorMessage('Unknown error');
       }
     }
   }
@@ -78,7 +78,7 @@ export const App = (): React.JSX.Element => {
     <div className={styles.app}>
       <AppHeader />
       {ingredientsRequest.hasError ? (
-        <p>Error occurred</p>
+        <p>Error occurred: {errorMessage ? errorMessage : 'Unknown error'}</p>
       ) : ingredientsRequest.isLoading ? (
         <Preloader />
       ) : (
@@ -86,7 +86,7 @@ export const App = (): React.JSX.Element => {
           <h1 className={`${styles.title} text text_type_main-large mt-10 mb-5 pl-5`}>
             Соберите бургер
           </h1>
-          <main className={`${styles.main} pl-5 pr-5`}>
+          <main className={`${styles.main} pl-5 pr-5 pb-10`}>
             <BurgerIngredients ingredients={ingredientsRequest.ingredients} />
             <BurgerConstructor ingredients={ingredientsRequest.ingredients} />
           </main>

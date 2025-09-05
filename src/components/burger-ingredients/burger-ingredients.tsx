@@ -44,7 +44,7 @@ export const BurgerIngredients = ({
     const listRef = ingredientsListRef.current;
 
     if (targetRef && listRef) {
-      const targetOffset = targetRef.offsetTop - listRef.offsetTop; // Смещение относительно .ingredients_list
+      const targetOffset = targetRef.offsetTop - listRef.offsetTop;
       listRef.scrollTo({
         top: targetOffset,
         behavior: 'smooth',
@@ -58,9 +58,8 @@ export const BurgerIngredients = ({
     return type === 'bun' ? 'Булки' : type === 'main' ? 'Начинки' : 'Соусы';
   };
 
-  //console.log(groupedIngredients);
   return (
-    <section className={styles.burger_ingredients}>
+    <section className={`${styles.burger_ingredients}`}>
       <nav>
         <ul className={styles.menu}>
           <Tab
@@ -86,15 +85,21 @@ export const BurgerIngredients = ({
           </Tab>
         </ul>
       </nav>
-      <div className={styles.ingredients_list} ref={ingredientsListRef}>
+      <div className={`${styles.ingredients_list} mr-4`} ref={ingredientsListRef}>
         {(['bun', 'main', 'sauce'] as const).map(
           (type) =>
             groupedIngredients[type] && (
-              <div key={type} ref={refs[type]}>
-                <h2 className={styles.category_title}>{getCategoryTitle(type)}</h2>
-                <div className={styles.ingredients_grid}>
+              <div key={type} ref={refs[type]} className="mt-10">
+                <h2 className={`${styles.category_title} mb-6`}>
+                  {getCategoryTitle(type)}
+                </h2>
+                <div className={`${styles.ingredients_grid} mb-15`}>
                   {groupedIngredients[type].map((ing) => (
-                    <BurgerIngredientCard key={ing._id} ingredient={ing} count={0} />
+                    <BurgerIngredientCard
+                      key={ing._id}
+                      ingredient={ing}
+                      count={0 /*Вставить настоящий счётчик*/}
+                    />
                   ))}
                 </div>
               </div>

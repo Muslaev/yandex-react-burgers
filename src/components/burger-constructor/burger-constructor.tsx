@@ -1,3 +1,4 @@
+import { Modal } from '@/components/modal/modal';
 import {
   ConstructorElement,
   DragIcon,
@@ -6,7 +7,6 @@ import {
 } from '@krgaa/react-developer-burger-ui-components';
 import { useState } from 'react';
 
-import { Modal } from '../modal/modal';
 import { OrderDetails } from './order-details/order-details';
 
 import type { TIngredient } from '@utils/types';
@@ -35,8 +35,8 @@ export const BurgerConstructor = ({
 
   return (
     <>
-      <section className={styles.burger_constructor}>
-        <div className={`${styles.external} ml-4 mr-4 mb-4`}>
+      <section className={`${styles.burger_constructor} pb-5`}>
+        <div className={`${styles.outter} pl-6 ml-4 mr-4 mb-4`}>
           <ConstructorElement
             type="top"
             isLocked={true}
@@ -45,16 +45,16 @@ export const BurgerConstructor = ({
             thumbnail={ingredients[0].image}
           />
         </div>
-        <div className={styles.internal}>
+        <div className={styles.inner}>
           {ingredients.map((ingredient, index) => {
             if (ingredient.type !== 'bun') {
               return (
-                <div key={index} className={`${styles.ingredientElem} ml-4 mr-4 mb-4`}>
-                  <DragIcon type="primary" />
+                <div key={index} className={`${styles.element} ml-4 mr-4 mb-4`}>
+                  <DragIcon type="primary" className="mr-1" />
                   <ConstructorElement
                     text={ingredient.name}
                     price={ingredient.price}
-                    thumbnail={ingredient.image}
+                    thumbnail={ingredient.image_mobile}
                   />
                 </div>
               );
@@ -62,7 +62,7 @@ export const BurgerConstructor = ({
             return null;
           })}
         </div>
-        <div className="ml-4 mr-4 mb-4">
+        <div className={`${styles.outter} pl-6 ml-4 mr-4 mt-4`}>
           <ConstructorElement
             type="bottom"
             isLocked={true}
@@ -71,23 +71,21 @@ export const BurgerConstructor = ({
             thumbnail={ingredients[0].image}
           />
         </div>
-        <div className={`${styles.orderInfo} mt-10`}>
-          <div className={`${styles.orderInfoPrice} mr-10`}>
-            <p className="mr-1 text text_type_digits-medium">18783</p>
+        <div className={`${styles.order} mt-10`}>
+          <div className={`${styles.price} mr-10`}>
+            <p className="text text_type_digits-medium mr-1">999999</p>
             <CurrencyIcon type="primary" />
           </div>
-          <div className={styles.orderInfoButton}>
-            <Button
-              htmlType="button"
-              type="primary"
-              size="large"
-              onClick={() => {
-                onClick();
-              }}
-            >
-              Оформить заказ
-            </Button>
-          </div>
+          <Button
+            htmlType="button"
+            type="primary"
+            size="large"
+            onClick={() => {
+              onClick();
+            }}
+          >
+            Оформить заказ
+          </Button>
         </div>
       </section>
       {modalVisible && (

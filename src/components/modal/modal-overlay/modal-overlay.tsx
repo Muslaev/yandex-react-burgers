@@ -9,7 +9,7 @@ const ModalOverlay = ({ onClose }: ModalOverlayProps): React.JSX.Element => {
     <div
       className={styles.modalOverlay}
       onClick={(e) => {
-        e.stopPropagation(); // Предотвращаем всплытие события
+        e.stopPropagation();
         onClose();
       }}
     />

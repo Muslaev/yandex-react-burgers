@@ -16,11 +16,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-weight: 700;
-  font-size: 36px;
   font-family: 'Jet Brains Mono', serif;
-  line-height: 40px;
-  letter-spacing: 0%;
   vertical-align: middle;
 }
 

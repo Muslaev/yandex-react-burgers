@@ -1,10 +1,10 @@
-.mainContainer {
+.main {
   display: flex;
   flex-flow: column;
   align-items: center;
 }
 
-.macronutrientContainer {
+.container {
   display: flex;
   flex-flow: row;
   justify-content: center;
@@ -13,23 +13,10 @@
   width: 520px;
 }
 
-.macronutrientElem {
+.element {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
   height: 50px;
-}
-
-.ingredientNameText {
-  font-weight: 700;
-  font-size: 24px;
-  font-family: 'Jet Brains Mono', serif;
-  line-height: 30px;
-  letter-spacing: 0;
-  text-align: center;
-}
-
-.ingredientHeaderText {
-  padding-left: 50px;
 }
