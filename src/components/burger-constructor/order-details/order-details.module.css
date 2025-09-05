@@ -1,0 +1,15 @@
+.orderId {
+  text-align: center;
+}
+
+.imageBox {
+  width: 120px;
+  height: 120px;
+  margin-right: auto;
+  margin-left: auto;
+  background: url('../../../images/done.svg');
+}
+
+.text {
+  text-align: center;
+}

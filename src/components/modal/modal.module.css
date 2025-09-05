@@ -1,0 +1,32 @@
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 3;
+  width: 720px;
+  overflow: hidden;
+  background: #1c1c21;
+  border: 1px solid rgb(76 76 255 / 20%);
+  border-radius: 40px;
+  cursor: auto;
+  transform: translate(-50%, -50%);
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'Jet Brains Mono', serif;
+  vertical-align: middle;
+}
+
+.closeModalCursor {
+  cursor: pointer;
+}
+
+.closeModalIcon {
+  position: absolute;
+  top: 0;
+  right: 0;
+  cursor: pointer;
+}
