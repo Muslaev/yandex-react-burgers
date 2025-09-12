@@ -20,6 +20,10 @@
   align-items: center;
 }
 
+.background {
+  background-color: aqua;
+}
+
 .order {
   display: flex;
   justify-content: flex-end;

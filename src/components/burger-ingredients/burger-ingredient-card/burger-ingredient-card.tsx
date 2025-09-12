@@ -1,9 +1,10 @@
-import { Modal } from '@/components/modal/modal';
+import { setIngredient } from '@/services/slices/ingredient-details-slice';
 import { Counter, CurrencyIcon } from '@krgaa/react-developer-burger-ui-components';
-import { useState } from 'react';
+import { useCallback } from 'react';
+import { useDrag } from 'react-dnd';
+import { useDispatch } from 'react-redux';
 
-import { IngredientDetails } from './ingredient-details/ingredient-details';
-
+import type { AppDispatch } from '@services/index';
 import type { TIngredient } from '@utils/types';
 
 import styles from './burger-ingredient-card.module.css';
@@ -17,19 +18,29 @@ export const BurgerIngredientCard = ({
   ingredient,
   count,
 }: TBurgerIngredientProps): React.JSX.Element => {
-  const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const dispatch = useDispatch<AppDispatch>();
+
+  const [, dragRef] = useDrag({
+    type: ingredient.type,
+    item: { ingredient },
+  });
+
+  const ref = useCallback(
+    (node: HTMLDivElement | null) => {
+      if (node) {
+        dragRef(node);
+      }
+    },
+    [dragRef]
+  );
 
   const onClick = (e: React.MouseEvent<HTMLDivElement>): void => {
     e.stopPropagation();
-    setModalVisible(true);
-  };
-
-  const onClose = (): void => {
-    setModalVisible(false);
+    dispatch(setIngredient(ingredient));
   };
 
   return (
-    <div className={`${styles.ingredient_card_container}`} onClick={onClick}>
+    <div className={`${styles.ingredient_card_container}`} onClick={onClick} ref={ref}>
       {count > 0 && <Counter count={count} />}
       <img src={ingredient.image} alt={ingredient.name} className={`${styles.image}`} />
       <div className={`${styles.price_container} mt-1 mb-1`}>
@@ -37,11 +48,6 @@ export const BurgerIngredientCard = ({
         <CurrencyIcon type="primary" />
       </div>
       <div className={`text text_type_main-small`}>{ingredient.name}</div>
-      {modalVisible && (
-        <Modal header="Детали ингредиента" onClose={onClose}>
-          <IngredientDetails ingredient={ingredient} />
-        </Modal>
-      )}
     </div>
   );
 };

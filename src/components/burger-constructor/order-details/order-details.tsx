@@ -1,14 +1,15 @@
+import { selectOrderNumber } from '@/services/slices/order-slice';
+import { useSelector } from 'react-redux';
+
 import styles from './order-details.module.css';
 
-type OrderDetailsProps = {
-  orderID: number;
-};
+export const OrderDetails = (): React.JSX.Element => {
+  const orderNumber = useSelector(selectOrderNumber);
 
-export const OrderDetails = ({ orderID }: OrderDetailsProps): React.JSX.Element => {
   return (
     <div>
       <div className={`${styles.orderId} text text_type_digits-large mt-30`}>
-        {orderID}
+        {orderNumber}
       </div>
       <div className={`${styles.text} text text_type_main-medium mt-8`}>
         идентификатор заказа
