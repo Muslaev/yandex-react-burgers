@@ -114,13 +114,12 @@ export const BurgerConstructor = (): React.JSX.Element => {
 
   const canOrder = !!bun;
 
-  // TODO: Fix styles
-  const background = isHover ? 'styles.background' : '';
+  const backgroundClass = isHover ? styles.background : '';
 
   return (
     <>
       <section
-        className={`${styles.burger_constructor} pb-5 ${background}`}
+        className={`${styles.burger_constructor} pb-5 ${backgroundClass}`}
         ref={dropRef}
       >
         <div className={`${styles.outter} pl-6 ml-4 mr-4 mb-4`}>
@@ -151,7 +150,9 @@ export const BurgerConstructor = (): React.JSX.Element => {
               );
             })
           ) : (
-            <p className="text text_type_main-default">Положите сюда ингредиенты</p>
+            <p className="text text_type_main-default text_color_inactive">
+              Положите сюда ингредиенты
+            </p>
           )}
         </div>
 

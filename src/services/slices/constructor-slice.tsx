@@ -53,9 +53,7 @@ const constructorSlice = createSlice({
         return;
 
       const draggedItem = state.constructorIngredients[fromIndex];
-      // Удаляем из старой позиции
       state.constructorIngredients.splice(fromIndex, 1);
-      // Вставляем в новую
       state.constructorIngredients.splice(toIndex, 0, draggedItem);
     },
     clearIngredients: (state) => {
