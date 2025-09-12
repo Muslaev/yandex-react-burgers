@@ -36,20 +36,12 @@ export const DraggableIngredient = ({
       return item.index !== index;
     },
     hover: (item: { ingredient: TIngredientWithKey; index: number }) => {
-      // Не выполняем сразу при первом hover — только если индекс изменился
       if (item.index === index) return;
 
-      // Получаем координаты текущего элемента
       const dragIndex = item.index;
       const hoverIndex = index;
-
-      // Если элемент ещё не был перемещён — пропускаем
       if (dragIndex === hoverIndex) return;
-
-      // Обновляем состояние только при изменении позиции
       dispatch(moveIngredient({ fromIndex: dragIndex, toIndex: hoverIndex }));
-
-      // Опционально: обновляем item.index, чтобы предотвратить повторные вызовы
       item.index = hoverIndex;
     },
     collect: (monitor) => ({
