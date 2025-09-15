@@ -1,4 +1,4 @@
-import { baseURL } from '@/utils/urls';
+import { request } from '@/utils/urls';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 type PartialOrderResponse = Partial<TOrderResponse>;
@@ -25,8 +25,6 @@ const initialState: OrderState = {
   errorMessage: undefined,
 };
 
-const ordersURL = `${baseURL}/orders`;
-
 const isPartialOrderResponse = (data: unknown): data is PartialOrderResponse => {
   if (!data || typeof data !== 'object') return false;
   const obj = data as Record<string, unknown>;
@@ -50,19 +48,13 @@ export const createOrder = createAsyncThunk<
   { rejectValue: string }
 >('order/createOrder', async (ingredientIds, { rejectWithValue }) => {
   try {
-    const response = await fetch(ordersURL, {
+    const rawData: unknown = await request('/orders', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ ingredients: ingredientIds }),
     });
-
-    if (!response.ok) {
-      throw new Error(`HTTP Error: ${response.status}`);
-    }
-
-    const rawData: unknown = await response.json();
 
     // Валидация структуры ответа
     if (isPartialOrderResponse(rawData)) {

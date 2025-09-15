@@ -3,12 +3,12 @@ import {
   selectConstructorIngredients,
   selectConstructorBun,
   addIngredient,
+  clearIngredients,
 } from '@/services/slices/constructor-slice';
 import {
-  selectIngredients,
-  selectIsLoading,
   incrementCounter,
   decrementCounter,
+  clearCounters,
 } from '@/services/slices/ingredients-slice';
 import {
   createOrder,
@@ -22,7 +22,7 @@ import {
   CurrencyIcon,
   Button,
 } from '@krgaa/react-developer-burger-ui-components';
-import { useEffect, useCallback, useMemo, useRef } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useDrop } from 'react-dnd';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -38,16 +38,11 @@ import styles from './burger-constructor.module.css';
 export const BurgerConstructor = (): React.JSX.Element => {
   const dispatch = useDispatch<AppDispatch>();
 
-  const allIngredients = useSelector(selectIngredients);
-  const ingredientsLoading = useSelector(selectIsLoading);
-
   const ingredients = useSelector(selectConstructorIngredients);
   const bun = useSelector(selectConstructorBun);
 
   const orderIsLoading = useSelector(selectIsOrderLoading);
   const orderNumber = useSelector(selectOrderNumber);
-
-  const initialized = useRef(false);
 
   const [{ isHover }, drop] = useDrop<
     { ingredient: TIngredientWithCounter },
@@ -74,26 +69,6 @@ export const BurgerConstructor = (): React.JSX.Element => {
     [drop]
   );
 
-  // Автоматически добавляем первую булку при загрузке ингредиентов, если булка ещё не выбрана
-  useEffect(() => {
-    if (
-      !initialized.current &&
-      !ingredientsLoading &&
-      allIngredients &&
-      allIngredients.length > 0 &&
-      !bun
-    ) {
-      const firstBun = allIngredients.find((ingredient) => ingredient.type === 'bun');
-      if (firstBun && typeof firstBun === 'object') {
-        dispatch(addIngredient(firstBun));
-        setTimeout(() => {
-          dispatch(incrementCounter(firstBun._id));
-        }, 0);
-      }
-      initialized.current = true;
-    }
-  }, [allIngredients, bun, ingredientsLoading, dispatch]);
-
   const onCreateOrderClick = (): void => {
     if (bun) {
       const orderIngredients = [bun._id, ...ingredients.map((ing) => ing._id), bun._id];
@@ -103,6 +78,8 @@ export const BurgerConstructor = (): React.JSX.Element => {
 
   const onCloseModal = (): void => {
     dispatch(resetOrder());
+    dispatch(clearIngredients());
+    dispatch(clearCounters());
   };
 
   const totalPrice = useMemo(() => {

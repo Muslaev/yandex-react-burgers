@@ -1,4 +1,4 @@
-import { baseURL } from '@/utils/urls';
+import { request } from '@/utils/urls';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 import type { PayloadAction } from '@reduxjs/toolkit';
@@ -6,7 +6,7 @@ import type { TIngredient } from '@utils/types';
 
 export type TIngredientWithCounter = TIngredient & { count: number };
 
-type ApiResponse = {
+type TIngredientsResponse = {
   success: boolean;
   data: TIngredient[];
 };
@@ -25,28 +25,29 @@ const initialState: IngredientsState = {
   errorMessage: undefined,
 };
 
-const ingredientsURL = `${baseURL}/ingredients`;
+type PartialIngredientsResponse = Partial<TIngredientsResponse>;
+
+const isPartialIngredientsResponse = (
+  rawData: unknown
+): rawData is PartialIngredientsResponse => {
+  if (!rawData || typeof rawData !== 'object') return false;
+  const obj = rawData as Record<string, unknown>;
+
+  if ('success' in obj && typeof obj.success !== 'boolean') return false;
+  if ('data' in obj && !Array.isArray(obj.data)) return false;
+
+  return true;
+};
 
 export const fetchIngredients = createAsyncThunk(
   'ingredients/fetchIngredients',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await fetch(ingredientsURL);
-      if (!response.ok) {
-        throw new Error(`HTTP Error: ${response.status}`);
-      }
-      const rawData: unknown = await response.json();
-      if (
-        rawData &&
-        typeof rawData === 'object' &&
-        'success' in rawData &&
-        typeof rawData.success === 'boolean' &&
-        'data' in rawData &&
-        Array.isArray(rawData.data)
-      ) {
-        const data: ApiResponse = rawData as ApiResponse;
+      const rawData: unknown = await request('/ingredients');
+      if (isPartialIngredientsResponse(rawData)) {
+        const data = rawData as TIngredientsResponse;
         if (!data.success) {
-          throw new Error('API request failed');
+          throw new Error('Ingredients request failed');
         }
         return data.data;
       } else {
@@ -63,7 +64,6 @@ const ingredientsSlice = createSlice({
   initialState,
   reducers: {
     incrementCounter: (state, action: PayloadAction<string>) => {
-      console.log('incrementCounter ', action.payload);
       return {
         ...state,
         ingredients: state.ingredients.map((ing) =>
@@ -72,7 +72,6 @@ const ingredientsSlice = createSlice({
       };
     },
     decrementCounter: (state, action: PayloadAction<string>) => {
-      console.log('decrementCounter ', action.payload);
       return {
         ...state,
         ingredients: state.ingredients.map((ing) =>
@@ -80,6 +79,12 @@ const ingredientsSlice = createSlice({
             ? { ...ing, count: ing.count - 1 >= 0 ? ing.count - 1 : 0 }
             : ing
         ),
+      };
+    },
+    clearCounters: (state) => {
+      return {
+        ...state,
+        ingredients: state.ingredients.map((ing) => ({ ...ing, count: 0 })),
       };
     },
   },
@@ -102,7 +107,8 @@ const ingredientsSlice = createSlice({
   },
 });
 
-export const { incrementCounter, decrementCounter } = ingredientsSlice.actions;
+export const { incrementCounter, decrementCounter, clearCounters } =
+  ingredientsSlice.actions;
 
 export default ingredientsSlice.reducer;
 
