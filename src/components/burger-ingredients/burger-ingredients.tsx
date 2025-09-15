@@ -1,19 +1,27 @@
+import { Modal } from '@/components/modal/modal';
+import {
+  removeIngredient,
+  selectIngredient,
+} from '@/services/slices/ingredient-details-slice';
+import { selectIngredients } from '@/services/slices/ingredients-slice';
 import { Tab } from '@krgaa/react-developer-burger-ui-components';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { BurgerIngredientCard } from './burger-ingredient-card/burger-ingredient-card';
+import { IngredientDetails } from './ingredient-details/ingredient-details';
 
-import type { TIngredient } from '@utils/types';
+import type { TIngredientWithCounter } from '@/services/slices/ingredients-slice';
+import type { AppDispatch } from '@services/index';
 
 import styles from './burger-ingredients.module.css';
 
-type TBurgerIngredientsProps = {
-  ingredients: TIngredient[];
-};
+export const BurgerIngredients = (): React.JSX.Element => {
+  const dispatch = useDispatch<AppDispatch>();
+  const ingredients = useSelector(selectIngredients);
+  const selectedIngredientRaw = useSelector(selectIngredient);
+  const selectedIngredient = selectedIngredientRaw;
 
-export const BurgerIngredients = ({
-  ingredients,
-}: TBurgerIngredientsProps): React.JSX.Element => {
   const [currentTab, setCurrentTab] = useState<'bun' | 'sauce' | 'main'>('bun');
 
   const bunRef = useRef<HTMLDivElement>(null);
@@ -35,10 +43,10 @@ export const BurgerIngredients = ({
       }
       return acc;
     },
-    {} as Record<'bun' | 'sauce' | 'main', TIngredient[]>
+    {} as Record<'bun' | 'sauce' | 'main', TIngredientWithCounter[]>
   );
 
-  const handleTabClick = (tab: 'bun' | 'sauce' | 'main'): void => {
+  const handleTabClick = useCallback((tab: 'bun' | 'sauce' | 'main'): void => {
     setCurrentTab(tab);
     const targetRef = refs[tab].current;
     const listRef = ingredientsListRef.current;
@@ -50,7 +58,45 @@ export const BurgerIngredients = ({
         behavior: 'smooth',
       });
     }
+  }, []);
+
+  const handleScroll = useCallback(() => {
+    const list = ingredientsListRef.current;
+    if (!list) return;
+
+    const scrollTop = list.scrollTop;
+
+    const positions = [
+      { type: 'bun' as const, pos: bunRef.current?.offsetTop ?? 0 },
+      { type: 'main' as const, pos: mainRef.current?.offsetTop ?? 0 },
+      { type: 'sauce' as const, pos: sauceRef.current?.offsetTop ?? 0 },
+    ] as const;
+
+    let closestType: 'bun' | 'sauce' | 'main' = 'bun';
+    let minDiff = Math.abs(scrollTop - positions[0].pos);
+
+    for (let i = 1; i < positions.length; i++) {
+      const diff = Math.abs(scrollTop - positions[i].pos);
+      if (diff < minDiff) {
+        minDiff = diff;
+        closestType = positions[i].type;
+      }
+    }
+
+    setCurrentTab(closestType);
+  }, []);
+
+  const onCloseModal = (): void => {
+    dispatch(removeIngredient());
   };
+
+  useEffect(() => {
+    const list = ingredientsListRef.current;
+    if (!list) return;
+
+    list.addEventListener('scroll', handleScroll, { passive: true });
+    return (): void => list.removeEventListener('scroll', handleScroll);
+  }, [handleScroll]);
 
   const getCategoryTitle = (
     type: 'bun' | 'sauce' | 'main'
@@ -59,53 +105,60 @@ export const BurgerIngredients = ({
   };
 
   return (
-    <section className={`${styles.burger_ingredients}`}>
-      <nav>
-        <ul className={styles.menu}>
-          <Tab
-            value="bun"
-            active={currentTab === 'bun'}
-            onClick={() => handleTabClick('bun')}
-          >
-            Булки
-          </Tab>
-          <Tab
-            value="main"
-            active={currentTab === 'main'}
-            onClick={() => handleTabClick('main')}
-          >
-            Начинки
-          </Tab>
-          <Tab
-            value="sauce"
-            active={currentTab === 'sauce'}
-            onClick={() => handleTabClick('sauce')}
-          >
-            Соусы
-          </Tab>
-        </ul>
-      </nav>
-      <div className={`${styles.ingredients_list} mr-4`} ref={ingredientsListRef}>
-        {(['bun', 'main', 'sauce'] as const).map(
-          (type) =>
-            groupedIngredients[type] && (
-              <div key={type} ref={refs[type]} className="mt-10">
-                <h2 className={`${styles.category_title} mb-6`}>
-                  {getCategoryTitle(type)}
-                </h2>
-                <div className={`${styles.ingredients_grid} mb-15`}>
-                  {groupedIngredients[type].map((ing) => (
-                    <BurgerIngredientCard
-                      key={ing._id}
-                      ingredient={ing}
-                      count={0 /*Вставить настоящий счётчик*/}
-                    />
-                  ))}
+    <>
+      <section className={`${styles.burger_ingredients}`}>
+        <nav>
+          <ul className={styles.menu}>
+            <Tab
+              value="bun"
+              active={currentTab === 'bun'}
+              onClick={() => handleTabClick('bun')}
+            >
+              Булки
+            </Tab>
+            <Tab
+              value="main"
+              active={currentTab === 'main'}
+              onClick={() => handleTabClick('main')}
+            >
+              Начинки
+            </Tab>
+            <Tab
+              value="sauce"
+              active={currentTab === 'sauce'}
+              onClick={() => handleTabClick('sauce')}
+            >
+              Соусы
+            </Tab>
+          </ul>
+        </nav>
+        <div className={`${styles.ingredients_list} mr-4`} ref={ingredientsListRef}>
+          {(['bun', 'main', 'sauce'] as const).map(
+            (type) =>
+              groupedIngredients[type] && (
+                <div key={type} ref={refs[type]} className="mt-10">
+                  <h2 className={`${styles.category_title} mb-6`}>
+                    {getCategoryTitle(type)}
+                  </h2>
+                  <div className={`${styles.ingredients_grid} mb-15`}>
+                    {groupedIngredients[type].map((ing) => (
+                      <BurgerIngredientCard
+                        key={ing._id}
+                        ingredient={ing}
+                        count={ing.count}
+                      />
+                    ))}
+                  </div>
                 </div>
-              </div>
-            )
-        )}
-      </div>
-    </section>
+              )
+          )}
+        </div>
+      </section>
+      {selectedIngredient && (
+        <Modal header="Детали ингредиента" onClose={onCloseModal}>
+          <IngredientDetails />
+        </Modal>
+      )}
+    </>
   );
 };

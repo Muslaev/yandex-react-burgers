@@ -1,14 +1,10 @@
-import type { TIngredient } from '@utils/types';
+import { selectIngredient } from '@/services/slices/ingredient-details-slice';
+import { useSelector } from 'react-redux';
 
 import styles from './ingredient-details.module.css';
 
-type IngredientDetailsProps = {
-  ingredient: TIngredient;
-};
-
-export const IngredientDetails = ({
-  ingredient,
-}: IngredientDetailsProps): React.JSX.Element => {
+export const IngredientDetails = (): React.JSX.Element => {
+  const ingredient = useSelector(selectIngredient)!;
   return (
     <>
       <div className={styles.main}>
