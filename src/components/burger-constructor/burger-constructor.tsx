@@ -16,6 +16,7 @@ import {
   selectIsOrderLoading,
   selectOrderNumber,
 } from '@/services/slices/order';
+import { selectIsAuthenticated } from '@/services/slices/user';
 import {
   Preloader,
   ConstructorElement,
@@ -25,6 +26,7 @@ import {
 import { useCallback, useMemo } from 'react';
 import { useDrop } from 'react-dnd';
 import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 import { DraggableIngredient } from './draggable-ingredient/draggable-ingredient';
 import { OrderDetails } from './order-details/order-details';
@@ -43,6 +45,9 @@ export const BurgerConstructor = (): React.JSX.Element => {
 
   const orderIsLoading = useSelector(selectIsOrderLoading);
   const orderNumber = useSelector(selectOrderNumber);
+
+  const navigate = useNavigate();
+  const isAuthenticated = useSelector(selectIsAuthenticated);
 
   const [{ isHover }, drop] = useDrop<
     { ingredient: TIngredientWithCounter },
@@ -70,6 +75,10 @@ export const BurgerConstructor = (): React.JSX.Element => {
   );
 
   const onCreateOrderClick = (): void => {
+    if (!isAuthenticated) {
+      void navigate('/login');
+      return;
+    }
     if (bun) {
       const orderIngredients = [bun._id, ...ingredients.map((ing) => ing._id), bun._id];
       void dispatch(createOrder(orderIngredients));
