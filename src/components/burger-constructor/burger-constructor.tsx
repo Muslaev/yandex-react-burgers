@@ -1,21 +1,21 @@
 import { Modal } from '@/components/modal/modal';
+import { createOrder } from '@/services/actions/order';
 import {
   selectConstructorIngredients,
   selectConstructorBun,
   addIngredient,
   clearIngredients,
-} from '@/services/slices/constructor-slice';
+} from '@/services/slices/burger-constructor';
 import {
   incrementCounter,
   decrementCounter,
   clearCounters,
-} from '@/services/slices/ingredients-slice';
+} from '@/services/slices/ingredients';
 import {
-  createOrder,
   resetOrder,
   selectIsOrderLoading,
   selectOrderNumber,
-} from '@/services/slices/order-slice';
+} from '@/services/slices/order';
 import {
   Preloader,
   ConstructorElement,
@@ -29,8 +29,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { DraggableIngredient } from './draggable-ingredient/draggable-ingredient';
 import { OrderDetails } from './order-details/order-details';
 
-import type { TIngredientWithCounter } from '@/services/slices/ingredients-slice';
 import type { AppDispatch } from '@services/index';
+import type { TIngredientWithCounter } from '@utils/types';
 import type { DropTargetMonitor } from 'react-dnd';
 
 import styles from './burger-constructor.module.css';

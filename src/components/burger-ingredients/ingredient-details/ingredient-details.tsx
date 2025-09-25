@@ -1,10 +1,16 @@
-import { selectIngredient } from '@/services/slices/ingredient-details-slice';
+import { selectIngredient } from '@/services/slices/ingredient-details';
+import { Preloader } from '@krgaa/react-developer-burger-ui-components';
 import { useSelector } from 'react-redux';
 
 import styles from './ingredient-details.module.css';
 
 export const IngredientDetails = (): React.JSX.Element => {
   const ingredient = useSelector(selectIngredient)!;
+
+  if (!ingredient) {
+    return <Preloader />;
+  }
+
   return (
     <>
       <div className={styles.main}>

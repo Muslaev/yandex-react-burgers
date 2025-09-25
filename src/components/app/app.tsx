@@ -1,51 +1,60 @@
-import { fetchIngredients } from '@/services/slices/ingredients-slice';
-import { Preloader } from '@krgaa/react-developer-burger-ui-components';
-import { useEffect } from 'react';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
-import { useSelector, useDispatch } from 'react-redux';
+import { ForgotPasswordPage } from '@/pages/forgot-password-page';
+import { HomePage } from '@/pages/home-page';
+import { IngredientPage } from '@/pages/ingredients-page';
+import { LoginPage } from '@/pages/login-page';
+import { NotFoundPage } from '@/pages/not-found-page';
+import { ProfilePage } from '@/pages/profile-page';
+import { OrderHistory } from '@/pages/profile-page/order-history';
+import { ProfileSettings } from '@/pages/profile-page/profile-settings';
+import { RegisterPage } from '@/pages/register-page';
+import { ResetPasswordPage } from '@/pages/reset-password-page';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import { AppHeader } from '@components/app-header/app-header';
-import { BurgerConstructor } from '@components/burger-constructor/burger-constructor';
-import { BurgerIngredients } from '@components/burger-ingredients/burger-ingredients';
-
-import type { AppDispatch, RootState } from '@services/index';
+import { ProtectedRouteElement } from '@components/protecetd-route';
+import { RestrictedRouteElement } from '@components/restricted-route';
 
 import styles from './app.module.css';
 
 export const App = (): React.JSX.Element => {
-  const dispatch = useDispatch<AppDispatch>();
-  const ingredientsState = useSelector((state: RootState) => state.ingredients) as {
-    isLoading: boolean;
-    hasError: boolean;
-    errorMessage: string | null;
-  };
-  const { isLoading, hasError, errorMessage } = ingredientsState;
-
-  useEffect(() => {
-    void dispatch(fetchIngredients());
-  }, [dispatch]);
-
   return (
     <div className={styles.app}>
-      <AppHeader />
-      {hasError ? (
-        <p>Error occurred: {errorMessage ?? 'Unknown error'}</p>
-      ) : isLoading ? (
-        <Preloader />
-      ) : (
-        <>
-          <h1 className={`${styles.title} text text_type_main-large mt-10 mb-5 pl-5`}>
-            Соберите бургер
-          </h1>
-          <main className={`${styles.main} pl-5 pr-5 pb-10`}>
-            <DndProvider backend={HTML5Backend}>
-              <BurgerIngredients />
-              <BurgerConstructor />
-            </DndProvider>
-          </main>
-        </>
-      )}
+      <Router>
+        <AppHeader />
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/ingredients/:id" element={<IngredientPage />} />
+          <Route
+            path="/login"
+            element={<RestrictedRouteElement element={<LoginPage />} />}
+          />
+          <Route
+            path="/register"
+            element={<RestrictedRouteElement element={<RegisterPage />} />}
+          />
+          <Route
+            path="/forgot-password"
+            element={<RestrictedRouteElement element={<ForgotPasswordPage />} />}
+          />
+          <Route
+            path="/reset-password"
+            element={
+              <RestrictedRouteElement
+                element={<ResetPasswordPage />}
+                restrictToResetPassword={true}
+              />
+            }
+          />
+          <Route
+            path="/profile"
+            element={<ProtectedRouteElement element={<ProfilePage />} />}
+          >
+            <Route index element={<ProfileSettings />} />
+            <Route path="orders" element={<OrderHistory />} />
+          </Route>
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+      </Router>
     </div>
   );
 };

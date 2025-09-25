@@ -1,22 +1,9 @@
-import { request } from '@/utils/urls';
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
+
+import { fetchIngredients } from '../actions/ingredients';
 
 import type { PayloadAction } from '@reduxjs/toolkit';
-import type { TIngredient } from '@utils/types';
-
-export type TIngredientWithCounter = TIngredient & { count: number };
-
-type TIngredientsResponse = {
-  success: boolean;
-  data: TIngredient[];
-};
-
-type IngredientsState = {
-  ingredients: TIngredientWithCounter[];
-  isLoading: boolean;
-  hasError: boolean;
-  errorMessage?: string;
-};
+import type { TIngredientWithCounter, IngredientsState } from '@utils/types';
 
 const initialState: IngredientsState = {
   ingredients: [],
@@ -24,40 +11,6 @@ const initialState: IngredientsState = {
   hasError: false,
   errorMessage: undefined,
 };
-
-type PartialIngredientsResponse = Partial<TIngredientsResponse>;
-
-const isPartialIngredientsResponse = (
-  rawData: unknown
-): rawData is PartialIngredientsResponse => {
-  if (!rawData || typeof rawData !== 'object') return false;
-  const obj = rawData as Record<string, unknown>;
-
-  if ('success' in obj && typeof obj.success !== 'boolean') return false;
-  if ('data' in obj && !Array.isArray(obj.data)) return false;
-
-  return true;
-};
-
-export const fetchIngredients = createAsyncThunk(
-  'ingredients/fetchIngredients',
-  async (_, { rejectWithValue }) => {
-    try {
-      const rawData: unknown = await request('/ingredients');
-      if (isPartialIngredientsResponse(rawData)) {
-        const data = rawData as TIngredientsResponse;
-        if (!data.success) {
-          throw new Error('Ingredients request failed');
-        }
-        return data.data;
-      } else {
-        throw new Error('Invalid API response structure');
-      }
-    } catch (e) {
-      return rejectWithValue(e instanceof Error ? e.message : 'Unknown error');
-    }
-  }
-);
 
 const ingredientsSlice = createSlice({
   name: 'ingredients',

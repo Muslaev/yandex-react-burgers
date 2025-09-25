@@ -1,4 +1,4 @@
-import { selectOrderNumber } from '@/services/slices/order-slice';
+import { selectOrderNumber } from '@/services/slices/order';
 import { useSelector } from 'react-redux';
 
 import styles from './order-details.module.css';

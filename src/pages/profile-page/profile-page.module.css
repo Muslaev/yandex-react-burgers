@@ -1,0 +1,42 @@
+.pageWrapper {
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
+  width: 100%;
+  max-width: 860px;
+  margin-left: calc(100vh - 630px);
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 320px;
+}
+
+.nav_link {
+  padding: 0;
+  text-align: left;
+  text-decoration: none;
+  background: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.active {
+  color: white;
+}
+
+.subtitle {
+  text-align: left;
+}
+
+.formContainer {
+  /* flex: 1;
+    
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; */
+  padding: 20px 0;
+}
