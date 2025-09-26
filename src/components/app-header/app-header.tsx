@@ -4,11 +4,17 @@ import {
   Logo,
   ProfileIcon,
 } from '@krgaa/react-developer-burger-ui-components';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 import styles from './app-header.module.css';
 
 export const AppHeader = (): React.JSX.Element => {
+  const navigate = useNavigate();
+
+  const handleBurgerClick = (): void => {
+    void navigate('/');
+  };
+
   return (
     <header className={styles.header}>
       <nav className={`${styles.menu} p-4`}>
@@ -32,7 +38,7 @@ export const AppHeader = (): React.JSX.Element => {
             <p className="text text_type_main-default ml-2">Лента заказов</p>
           </NavLink>
         </div>
-        <div className={styles.logo}>
+        <div className={styles.logo} onClick={handleBurgerClick}>
           <Logo />
         </div>
         <NavLink

@@ -1,4 +1,3 @@
-import { fetchIngredients } from '@/services/actions/ingredients';
 import { setIngredient } from '@/services/slices/ingredient-details';
 import {
   selectIngredients,
@@ -24,9 +23,7 @@ export const IngredientPage = (): React.JSX.Element => {
   const hasError = useSelector(selectError);
 
   useEffect(() => {
-    if (!ingredients.length) {
-      void dispatch(fetchIngredients());
-    } else if (id) {
+    if (id) {
       const ingredient = ingredients.find((item) => item._id === id);
       if (ingredient) {
         dispatch(setIngredient(ingredient));
