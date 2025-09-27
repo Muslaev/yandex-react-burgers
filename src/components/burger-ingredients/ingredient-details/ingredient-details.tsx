@@ -1,14 +1,40 @@
-import { selectIngredient } from '@/services/slices/ingredient-details';
+import {
+  selectIngredients,
+  selectIsLoading,
+  selectError,
+} from '@/services/slices/ingredients';
 import { Preloader } from '@krgaa/react-developer-burger-ui-components';
+import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+
+import type { TIngredientWithCounter } from '@/utils/types';
 
 import styles from './ingredient-details.module.css';
 
 export const IngredientDetails = (): React.JSX.Element => {
-  const ingredient = useSelector(selectIngredient)!;
+  const [ingredient, setIngredient] = useState<TIngredientWithCounter>();
+  const ingredients = useSelector(selectIngredients);
+  const isLoading = useSelector(selectIsLoading);
+  const hasError = useSelector(selectError);
+  const { id } = useParams<{ id: string }>();
+  useEffect(() => {
+    if (id) {
+      const ingredient = ingredients.find(
+        (item: TIngredientWithCounter) => item._id === id
+      );
+      if (ingredient) {
+        setIngredient(ingredient);
+      }
+    }
+  }, [id, ingredients]);
 
-  if (!ingredient) {
+  if (isLoading) {
     return <Preloader />;
+  }
+
+  if (hasError || !ingredient) {
+    return <p className="text text_type_main-medium">Ошибка загрузки данных</p>;
   }
 
   return (
