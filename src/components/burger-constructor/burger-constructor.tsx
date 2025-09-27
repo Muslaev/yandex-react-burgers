@@ -1,21 +1,22 @@
 import { Modal } from '@/components/modal/modal';
+import { createOrder } from '@/services/actions/order';
 import {
   selectConstructorIngredients,
   selectConstructorBun,
   addIngredient,
   clearIngredients,
-} from '@/services/slices/constructor-slice';
+} from '@/services/slices/burger-constructor';
 import {
   incrementCounter,
   decrementCounter,
   clearCounters,
-} from '@/services/slices/ingredients-slice';
+} from '@/services/slices/ingredients';
 import {
-  createOrder,
   resetOrder,
   selectIsOrderLoading,
   selectOrderNumber,
-} from '@/services/slices/order-slice';
+} from '@/services/slices/order';
+import { selectIsAuthenticated } from '@/services/slices/user';
 import {
   Preloader,
   ConstructorElement,
@@ -25,12 +26,13 @@ import {
 import { useCallback, useMemo } from 'react';
 import { useDrop } from 'react-dnd';
 import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 import { DraggableIngredient } from './draggable-ingredient/draggable-ingredient';
 import { OrderDetails } from './order-details/order-details';
 
-import type { TIngredientWithCounter } from '@/services/slices/ingredients-slice';
 import type { AppDispatch } from '@services/index';
+import type { TIngredientWithCounter } from '@utils/types';
 import type { DropTargetMonitor } from 'react-dnd';
 
 import styles from './burger-constructor.module.css';
@@ -43,6 +45,9 @@ export const BurgerConstructor = (): React.JSX.Element => {
 
   const orderIsLoading = useSelector(selectIsOrderLoading);
   const orderNumber = useSelector(selectOrderNumber);
+
+  const navigate = useNavigate();
+  const isAuthenticated = useSelector(selectIsAuthenticated);
 
   const [{ isHover }, drop] = useDrop<
     { ingredient: TIngredientWithCounter },
@@ -70,6 +75,10 @@ export const BurgerConstructor = (): React.JSX.Element => {
   );
 
   const onCreateOrderClick = (): void => {
+    if (!isAuthenticated) {
+      void navigate('/login');
+      return;
+    }
     if (bun) {
       const orderIngredients = [bun._id, ...ingredients.map((ing) => ing._id), bun._id];
       void dispatch(createOrder(orderIngredients));

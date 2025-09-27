@@ -1,5 +1,5 @@
-import { moveIngredient, removeIngredient } from '@/services/slices/constructor-slice';
-import { decrementCounter } from '@/services/slices/ingredients-slice';
+import { moveIngredient, removeIngredient } from '@/services/slices/burger-constructor';
+import { decrementCounter } from '@/services/slices/ingredients';
 import {
   ConstructorElement,
   DragIcon,
@@ -9,7 +9,7 @@ import { useDrag, useDrop } from 'react-dnd';
 import { useDispatch } from 'react-redux';
 
 import type { AppDispatch } from '@/services';
-import type { TIngredientWithKey } from '@/services/slices/constructor-slice';
+import type { TIngredientWithKey } from '@utils/types';
 
 import styles from './draggable-ingredient.module.css';
 

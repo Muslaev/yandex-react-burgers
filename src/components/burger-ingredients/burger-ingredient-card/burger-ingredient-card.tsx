@@ -1,10 +1,8 @@
-import { setIngredient } from '@/services/slices/ingredient-details-slice';
 import { Counter, CurrencyIcon } from '@krgaa/react-developer-burger-ui-components';
 import { useCallback } from 'react';
 import { useDrag } from 'react-dnd';
-import { useDispatch } from 'react-redux';
+import { useNavigate, useLocation } from 'react-router-dom';
 
-import type { AppDispatch } from '@services/index';
 import type { TIngredient } from '@utils/types';
 
 import styles from './burger-ingredient-card.module.css';
@@ -18,7 +16,8 @@ export const BurgerIngredientCard = ({
   ingredient,
   count,
 }: TBurgerIngredientProps): React.JSX.Element => {
-  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const [, dragRef] = useDrag({
     type: ingredient.type,
@@ -36,7 +35,9 @@ export const BurgerIngredientCard = ({
 
   const onClick = (e: React.MouseEvent<HTMLDivElement>): void => {
     e.stopPropagation();
-    dispatch(setIngredient(ingredient));
+    void navigate(`/ingredients/${ingredient._id}`, {
+      state: { background: location },
+    });
   };
 
   return (

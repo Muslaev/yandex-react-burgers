@@ -1,17 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { v4 as uuidv4 } from 'uuid';
 
-import type { TIngredientWithCounter } from './ingredients-slice';
 import type { PayloadAction } from '@reduxjs/toolkit';
+import type {
+  TIngredientWithCounter,
+  TIngredientWithKey,
+  ConstructorState,
+} from '@utils/types';
 
-export type TIngredientWithKey = TIngredientWithCounter & { key: string };
-
-type IConstructorState = {
-  bun: TIngredientWithCounter | null;
-  constructorIngredients: TIngredientWithKey[];
-};
-
-const initialState: IConstructorState = {
+const initialState: ConstructorState = {
   bun: null,
   constructorIngredients: [],
 };
@@ -78,9 +75,9 @@ export const { addIngredient, removeIngredient, moveIngredient, clearIngredients
 export default constructorSlice.reducer;
 
 export const selectConstructorIngredients = (state: {
-  burgerConstructor: IConstructorState;
+  burgerConstructor: ConstructorState;
 }): TIngredientWithKey[] => state.burgerConstructor.constructorIngredients;
 
 export const selectConstructorBun = (state: {
-  burgerConstructor: IConstructorState;
+  burgerConstructor: ConstructorState;
 }): TIngredientWithCounter | null => state.burgerConstructor.bun;
