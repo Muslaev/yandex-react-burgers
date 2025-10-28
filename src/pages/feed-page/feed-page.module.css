@@ -1,0 +1,9 @@
+.wrapper {
+  width: 100%;
+}
+
+.content {
+  display: flex;
+  justify-content: space-between;
+  max-height: 664px;
+}

@@ -1,17 +1,16 @@
 import { logoutUser } from '@/services/actions/user';
 import { selectIsUserLoading } from '@/services/slices/user';
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '@/utils/hooks';
 import { NavLink, Outlet, useNavigate, useLocation } from 'react-router-dom';
 
-import type { AppDispatch } from '@/services';
 import type React from 'react';
 
 import styles from './profile-page.module.css';
 
 export const ProfilePage: React.FC = () => {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const isLoading = useSelector(selectIsUserLoading);
+  const isLoading = useAppSelector(selectIsUserLoading);
   const location = useLocation();
 
   const onLogout = async (): Promise<void> => {

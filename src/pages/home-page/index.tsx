@@ -1,7 +1,7 @@
+import { useAppSelector } from '@/utils/hooks';
 import { Preloader } from '@krgaa/react-developer-burger-ui-components';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { useSelector } from 'react-redux';
 
 import { BurgerConstructor } from '@components/burger-constructor/burger-constructor';
 import { BurgerIngredients } from '@components/burger-ingredients/burger-ingredients';
@@ -14,9 +14,9 @@ import {
 import styles from './home-page.module.css';
 
 export const HomePage = (): React.JSX.Element => {
-  const isLoading = useSelector(selectIsLoading);
-  const hasError = useSelector(selectError);
-  const errorMessage = useSelector(selectErrorMessage);
+  const isLoading = useAppSelector(selectIsLoading);
+  const hasError = useAppSelector(selectError);
+  const errorMessage = useAppSelector(selectErrorMessage);
 
   return (
     <>

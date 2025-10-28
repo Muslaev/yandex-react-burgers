@@ -1,10 +1,10 @@
 import { selectOrderNumber } from '@/services/slices/order';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '@/utils/hooks';
 
 import styles from './order-details.module.css';
 
 export const OrderDetails = (): React.JSX.Element => {
-  const orderNumber = useSelector(selectOrderNumber);
+  const orderNumber = useAppSelector(selectOrderNumber);
 
   return (
     <div>

@@ -4,6 +4,7 @@ import {
   selectIsUserLoading,
   selectUserError,
 } from '@/services/slices/user';
+import { useAppDispatch, useAppSelector } from '@/utils/hooks';
 import {
   Button,
   EmailInput,
@@ -13,10 +14,7 @@ import {
 } from '@krgaa/react-developer-burger-ui-components';
 import { useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-
-import type { AppDispatch } from '@/services';
 
 import styles from './register-page.module.css';
 
@@ -44,12 +42,12 @@ export const RegisterPage: React.FC = () => {
       name: '',
     },
   });
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const isAuthenticated = useSelector(selectIsAuthenticated);
-  const isLoading = useSelector(selectIsUserLoading);
-  const error = useSelector(selectUserError);
+  const isAuthenticated = useAppSelector(selectIsAuthenticated);
+  const isLoading = useAppSelector(selectIsUserLoading);
+  const error = useAppSelector(selectUserError);
 
   const onSubmit = async (data: RegisterForm): Promise<void> => {
     try {

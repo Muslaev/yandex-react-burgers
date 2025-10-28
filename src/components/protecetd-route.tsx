@@ -1,21 +1,19 @@
 import { fetchUser, refreshToken } from '@/services/actions/user';
 import { selectIsAuthenticated, selectIsUserLoading } from '@/services/slices/user';
+import { useAppDispatch, useAppSelector } from '@/utils/hooks';
 import { Preloader } from '@krgaa/react-developer-burger-ui-components';
 import { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import { Navigate, useLocation } from 'react-router-dom';
-
-import type { AppDispatch } from '@services/index';
 
 export function ProtectedRouteElement({
   element,
 }: {
   element: React.JSX.Element;
 }): React.JSX.Element {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const location = useLocation();
-  const isAuthenticated = useSelector(selectIsAuthenticated);
-  const isLoading = useSelector(selectIsUserLoading);
+  const isAuthenticated = useAppSelector(selectIsAuthenticated);
+  const isLoading = useAppSelector(selectIsUserLoading);
   const [isUserLoaded, setUserLoaded] = useState(false);
 
   const init = async (): Promise<void> => {

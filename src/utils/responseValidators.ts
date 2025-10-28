@@ -5,6 +5,7 @@ import type {
   TLogoutResponse,
   TPasswordResetResponse,
   TRefreshTokenResponse,
+  TOrderItem,
 } from './types';
 
 type PartialIngredientsResponse = Partial<TIngredientsResponse>;
@@ -95,4 +96,43 @@ export const isPartialRefreshTokenResponse = (
   if ('refreshToken' in obj && typeof obj.refreshToken !== 'string') return false;
 
   return true;
+};
+
+export const isValidOrderResponse = (
+  data: unknown
+): data is { success: true; orders: TOrderItem[] } => {
+  if (!data || typeof data !== 'object') return false;
+  const obj = data as Record<string, unknown>;
+
+  if (!('success' in obj) || obj.success !== true) return false;
+  if (!('orders' in obj) || !Array.isArray(obj.orders)) return false;
+  if (obj.orders.length === 0) return false;
+
+  // Проверяем первый элемент как TOrderItem (через валидатор)
+  return isValidOrder(obj.orders[0]);
+};
+
+const isValidOrder = (order: unknown): order is TOrderItem => {
+  if (!order || typeof order !== 'object') return false;
+  const obj = order as Record<string, unknown>;
+
+  // Проверяем все обязательные поля TOrderItem
+  if (!('_id' in obj) || typeof obj._id !== 'string') return false;
+  if (!('name' in obj) || typeof obj.name !== 'string') return false;
+  if (!('status' in obj) || typeof obj.status !== 'string') return false;
+  if (!('number' in obj) || typeof obj.number !== 'number') return false;
+  if (!('createdAt' in obj) || typeof obj.createdAt !== 'string') return false;
+  if (!('updatedAt' in obj) || typeof obj.updatedAt !== 'string') return false;
+
+  // ingredients — массив строк
+  if (!('ingredients' in obj) || !Array.isArray(obj.ingredients)) return false;
+  if (!obj.ingredients.every((ing): ing is string => typeof ing === 'string'))
+    return false;
+
+  return true;
+};
+
+export const validateOrders = (orders: unknown): TOrderItem[] => {
+  if (!Array.isArray(orders)) return [];
+  return orders.filter(isValidOrder);
 };

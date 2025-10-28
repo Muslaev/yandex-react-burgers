@@ -13,6 +13,16 @@ export type TIngredient = {
   __v: number;
 };
 
+export type TOrderItem = {
+  _id: string;
+  ingredients: string[];
+  status: string;
+  name: string;
+  createdAt: string | number | Date;
+  updatedAt: string;
+  number: number;
+};
+
 export type TIngredientWithCounter = TIngredient & { count: number };
 export type TIngredientWithKey = TIngredientWithCounter & { key: string };
 
@@ -53,6 +63,11 @@ export type TOrderResponse = {
   success: boolean;
 };
 
+export type TOrderDetailsResponse = {
+  success: boolean;
+  data: TIngredient[];
+};
+
 // State types
 export type TUser = {
   email: string;
@@ -91,4 +106,18 @@ export type OrderState = {
   isLoading: boolean;
   hasError: boolean;
   errorMessage?: string;
+};
+
+export type FeedState = {
+  orders: TOrderItem[];
+  total: number;
+  totalToday: number;
+  isConnected: boolean;
+  error: string | null;
+};
+
+export type UserFeedState = {
+  orders: TOrderItem[];
+  isConnected: boolean;
+  error: string | null;
 };

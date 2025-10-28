@@ -1,4 +1,5 @@
 export const baseURL = 'https://norma.nomoreparties.space/api';
+export const baseSocketURL = 'wss://norma.education-services.ru/orders';
 
 export function checkResponse(response: Response): Promise<unknown> {
   if (!response.ok) {

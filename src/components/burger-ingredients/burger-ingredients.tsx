@@ -1,7 +1,7 @@
 import { selectIngredients } from '@/services/slices/ingredients';
+import { useAppSelector } from '@/utils/hooks';
 import { Tab } from '@krgaa/react-developer-burger-ui-components';
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { useSelector } from 'react-redux';
 
 import { BurgerIngredientCard } from './burger-ingredient-card/burger-ingredient-card';
 
@@ -10,7 +10,7 @@ import type { TIngredientWithCounter } from '@utils/types';
 import styles from './burger-ingredients.module.css';
 
 export const BurgerIngredients = (): React.JSX.Element => {
-  const ingredients = useSelector(selectIngredients);
+  const ingredients = useAppSelector(selectIngredients);
 
   const [currentTab, setCurrentTab] = useState<'bun' | 'sauce' | 'main'>('bun');
 
