@@ -2,10 +2,8 @@ import { validateOrders } from '@/utils/responseValidators';
 import { createSlice } from '@reduxjs/toolkit';
 
 import type { UserFeedState } from '@/utils/types';
-// src/services/slices/user-feed.tsx
 import type { PayloadAction } from '@reduxjs/toolkit';
 
-// === Тип сообщения от сервера (для userFeed) ===
 type TWsUserFeedPayload = {
   orders?: {
     _id: string;
@@ -18,7 +16,6 @@ type TWsUserFeedPayload = {
   }[];
 };
 
-// === Type guards для matcher ===
 const isWsOpenOrSuccess = (
   action: unknown
 ): action is { type: 'userFeed/wsOpen' | 'userFeed/wsSuccess' } =>
@@ -62,25 +59,22 @@ const userFeedSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      // Успешное подключение
       .addMatcher(isWsOpenOrSuccess, (state) => {
         state.isConnected = true;
         state.error = null;
       })
-      // Закрытие соединения
       .addMatcher(isWsClosed, (state) => {
         state.isConnected = false;
       })
-      // Ошибка
       .addMatcher(isWsError, (state, action) => {
         state.error = action.payload;
         state.isConnected = false;
       })
-      // Новое сообщение
       .addMatcher(isWsMessage, (state, action) => {
         const payload = action.payload;
 
         if (payload && typeof payload === 'object') {
+          console.log('MESSAGE USER FEED:', payload);
           const orders = Array.isArray(payload.orders) ? payload.orders : [];
           state.orders = validateOrders(orders);
         }
@@ -90,7 +84,6 @@ const userFeedSlice = createSlice({
 
 export default userFeedSlice.reducer;
 
-// === Селекторы с явными типами ===
 export const selectUserFeedOrders = (state: {
   userFeed: UserFeedState;
 }): UserFeedState['orders'] => state.userFeed.orders;

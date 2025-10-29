@@ -14,11 +14,13 @@ export const FeedPage = (): React.JSX.Element => {
 
   return (
     <section className={styles.wrapper}>
-      <h3 className="text text_type_main-large mt-10 mb-5">Лента заказов</h3>
-      <div className={styles.content}>
+      <h1 className={`${styles.title} text text_type_main-large mt-10 mb-5 pl-5`}>
+        Лента заказов
+      </h1>
+      <main className={`${styles.main} pl-5 pr-5 pb-10`}>
         <OrderList />
         <OrderStatistic />
-      </div>
+      </main>
     </section>
   );
 };

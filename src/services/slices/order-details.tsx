@@ -1,4 +1,3 @@
-// src/services/slices/order-details.tsx
 import { createSlice } from '@reduxjs/toolkit';
 
 import { fetchOrderByNumber } from '../actions/order-details';
@@ -25,7 +24,7 @@ const orderDetailsSlice = createSlice({
     clearOrder: (state) => {
       state.order = null;
       state.error = null;
-      state.isLoading = false; // добавим сброс
+      state.isLoading = false;
     },
   },
   extraReducers: (builder) => {
@@ -55,7 +54,6 @@ const orderDetailsSlice = createSlice({
 export const { clearOrder } = orderDetailsSlice.actions;
 export default orderDetailsSlice.reducer;
 
-// Селекторы
 export const selectOrderDetails = (state: {
   orderDetails: OrderDetailsState;
 }): TOrderItem | null => state.orderDetails.order;

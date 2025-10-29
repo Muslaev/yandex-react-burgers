@@ -1,4 +1,3 @@
-// src/components/order-info/index.tsx
 import { fetchOrderByNumber } from '@/services/actions/order-details';
 import { selectFeedOrders } from '@/services/slices/feed';
 import { selectIngredients } from '@/services/slices/ingredients';
@@ -12,6 +11,7 @@ import { useAppSelector, useAppDispatch } from '@/utils/hooks';
 import {
   CurrencyIcon,
   FormattedDate,
+  Preloader,
 } from '@krgaa/react-developer-burger-ui-components';
 import { useMemo, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
@@ -25,7 +25,6 @@ export const OrderInfo = (): React.JSX.Element => {
   const { id } = useParams<{ id: string }>();
   const orderNumber = id ? Number(id) : null;
 
-  // === Данные из store ===
   const orderInDetails = useAppSelector(selectOrderDetails);
   const feedOrders = useAppSelector(selectFeedOrders);
   const userFeedOrders = useAppSelector(selectUserFeedOrders);
@@ -33,7 +32,6 @@ export const OrderInfo = (): React.JSX.Element => {
   const isLoading = useAppSelector(selectOrderDetailsLoading);
   const error = useAppSelector(selectOrderDetailsError);
 
-  // === ХУКИ В НАЧАЛЕ ===
   const orderInFeed = useMemo(
     () => feedOrders.find((o) => o.number === orderNumber),
     [feedOrders, orderNumber]
@@ -77,19 +75,18 @@ export const OrderInfo = (): React.JSX.Element => {
         : 'Создан';
   }, [order]);
 
-  // === useEffect ПОСЛЕ всех хуков ===
   useEffect(() => {
     if (!orderNumber || isNaN(orderNumber)) return;
-    if (order) return; // Уже есть в feed/userFeed/details
+    if (order) return;
 
     void dispatch(fetchOrderByNumber(orderNumber));
   }, [dispatch, orderNumber, order]);
 
-  // === Ранний возврат ПОСЛЕ всех хуков ===
   if (isLoading) {
     return (
       <main className={styles.main_container}>
         <p className="text text_type_main-default">Загрузка заказа...</p>
+        <Preloader />
       </main>
     );
   }
@@ -114,7 +111,6 @@ export const OrderInfo = (): React.JSX.Element => {
 
   const statusColor = order.status === 'done' ? styles.status_done : '';
 
-  // === Основной рендер ===
   return (
     <main className={styles.main_container}>
       <p className={`text text_type_digits-default mt-4 mb-10 ${styles.orderNr}`}>

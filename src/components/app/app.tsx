@@ -92,7 +92,7 @@ export const App = (): React.JSX.Element => {
             }
           />
           <Route
-            path={'/profile/orders/:id'}
+            path="/profile/orders/:id"
             element={
               <Modal onClose={handleCloseModal}>
                 <OrderInfo />
@@ -101,7 +101,7 @@ export const App = (): React.JSX.Element => {
           />
 
           <Route
-            path={'feed/:id'}
+            path="feed/:id"
             element={
               <Modal onClose={handleCloseModal}>
                 <OrderInfo />

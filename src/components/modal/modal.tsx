@@ -46,13 +46,7 @@ export const Modal = ({ header, onClose, children }: ModalProps): React.JSX.Elem
           </div>
         ) : (
           <div>
-            <div
-              className={`${styles.closeModalIcon} mr-10 mt-15`}
-              onClick={(e) => {
-                e.stopPropagation();
-                onClose();
-              }}
-            >
+            <div className={`${styles.closeModalIcon} mr-10 mt-15`}>
               <CloseIcon
                 type="primary"
                 onClick={() => {

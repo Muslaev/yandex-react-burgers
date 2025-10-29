@@ -1,4 +1,3 @@
-// src/services/middleware/socketMiddleware.ts
 import { refreshToken } from '../actions/user';
 
 import type { AppDispatch, RootState } from '../index';
@@ -30,7 +29,6 @@ type TWsMessage = {
   message?: string;
 };
 
-// Type guard для action
 const isWsStartAction = (
   action: unknown
 ): action is { type: string; payload?: { url?: string } } => {
@@ -125,7 +123,6 @@ export const socketMiddleware = (
     };
 
     return (next) => (action: unknown) => {
-      // === Проверяем тип action ===
       if (!isWsStartAction(action)) {
         return next(action);
       }

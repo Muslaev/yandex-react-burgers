@@ -6,6 +6,7 @@ import type {
   TPasswordResetResponse,
   TRefreshTokenResponse,
   TOrderItem,
+  TOrderDetailsResponse,
 } from './types';
 
 type PartialIngredientsResponse = Partial<TIngredientsResponse>;
@@ -98,25 +99,22 @@ export const isPartialRefreshTokenResponse = (
   return true;
 };
 
-export const isValidOrderResponse = (
-  data: unknown
-): data is { success: true; orders: TOrderItem[] } => {
-  if (!data || typeof data !== 'object') return false;
-  const obj = data as Record<string, unknown>;
+export const isPartialOrderDetailsResponse = (
+  rawData: unknown
+): rawData is Partial<TOrderDetailsResponse> => {
+  if (!rawData || typeof rawData !== 'object') return false;
+  const obj = rawData as Record<string, unknown>;
 
-  if (!('success' in obj) || obj.success !== true) return false;
-  if (!('orders' in obj) || !Array.isArray(obj.orders)) return false;
-  if (obj.orders.length === 0) return false;
+  if ('success' in obj && typeof obj.success !== 'boolean') return false;
+  if ('data' in obj && !Array.isArray(obj.data)) return false;
 
-  // Проверяем первый элемент как TOrderItem (через валидатор)
-  return isValidOrder(obj.orders[0]);
+  return true;
 };
 
 const isValidOrder = (order: unknown): order is TOrderItem => {
   if (!order || typeof order !== 'object') return false;
   const obj = order as Record<string, unknown>;
 
-  // Проверяем все обязательные поля TOrderItem
   if (!('_id' in obj) || typeof obj._id !== 'string') return false;
   if (!('name' in obj) || typeof obj.name !== 'string') return false;
   if (!('status' in obj) || typeof obj.status !== 'string') return false;
@@ -124,7 +122,6 @@ const isValidOrder = (order: unknown): order is TOrderItem => {
   if (!('createdAt' in obj) || typeof obj.createdAt !== 'string') return false;
   if (!('updatedAt' in obj) || typeof obj.updatedAt !== 'string') return false;
 
-  // ingredients — массив строк
   if (!('ingredients' in obj) || !Array.isArray(obj.ingredients)) return false;
   if (!obj.ingredients.every((ing): ing is string => typeof ing === 'string'))
     return false;

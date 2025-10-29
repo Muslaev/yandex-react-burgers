@@ -2,10 +2,8 @@ import { validateOrders } from '@/utils/responseValidators';
 import { createSlice } from '@reduxjs/toolkit';
 
 import type { FeedState } from '@/utils/types';
-// src/services/slices/feed.tsx
 import type { PayloadAction } from '@reduxjs/toolkit';
 
-// === Типы WS ===
 type TWsMessagePayload = {
   orders?: {
     _id: string;
@@ -20,7 +18,6 @@ type TWsMessagePayload = {
   totalToday?: number;
 };
 
-// === Type guards для matcher ===
 const isWsOpenOrSuccess = (
   action: unknown
 ): action is { type: 'feed/wsOpen' | 'feed/wsSuccess' } =>
@@ -66,21 +63,17 @@ const feedSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      // Успешное подключение
       .addMatcher(isWsOpenOrSuccess, (state) => {
         state.isConnected = true;
         state.error = null;
       })
-      // Закрытие
       .addMatcher(isWsClosed, (state) => {
         state.isConnected = false;
       })
-      // Ошибка
       .addMatcher(isWsError, (state, action) => {
         state.error = action.payload;
         state.isConnected = false;
       })
-      // Новое сообщение
       .addMatcher(isWsMessage, (state, action) => {
         const payload = action.payload;
 
@@ -100,7 +93,6 @@ const feedSlice = createSlice({
 
 export default feedSlice.reducer;
 
-// === Селекторы ===
 export const selectFeedOrders = (state: { feed: FeedState }): FeedState['orders'] =>
   state.feed.orders;
 

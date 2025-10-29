@@ -65,7 +65,7 @@ export type TOrderResponse = {
 
 export type TOrderDetailsResponse = {
   success: boolean;
-  data: TIngredient[];
+  data: TOrderItem[];
 };
 
 // State types

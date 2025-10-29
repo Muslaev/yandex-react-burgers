@@ -6,7 +6,7 @@ import {
 import { useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import type { TIngredient, TOrderItem } from '@/utils/types';
+import type { TOrderItem } from '@/utils/types';
 import type { FC } from 'react';
 
 import styles from './order-element.module.css';
@@ -37,26 +37,23 @@ export const OrderElement: FC<TOrderData> = ({ order }) => {
     [order]
   );
 
-  const orderIngredients = useMemo(
-    () =>
-      order.ingredients.map((elemId: string) =>
-        ingredients.find((elem: TIngredient) => elem._id === elemId)
-      ),
-    [ingredients, order.ingredients]
-  );
-
-  const firstItems = useMemo(
-    () => orderIngredients.slice(0, maxShownItems),
-    [orderIngredients]
-  );
+  const displayedIngredients = useMemo(() => {
+    return order.ingredients.slice(0, maxShownItems).map((ingredientId, i) => {
+      const item = ingredients.find((elem) => elem._id === ingredientId);
+      return { item, originalIndex: i };
+    });
+  }, [order.ingredients, ingredients, maxShownItems]);
 
   const orderAmount = useMemo(
     () =>
-      orderIngredients.reduce((amount: number, elem: TIngredient | undefined) => {
-        return amount + (elem?.price ?? 0);
+      order.ingredients.reduce((amount: number, ingredientId: string) => {
+        const item = ingredients.find((elem) => elem._id === ingredientId);
+        return amount + (item?.price ?? 0);
       }, 0),
-    [orderIngredients]
+    [order.ingredients, ingredients]
   );
+
+  const hiddenCount = Math.max(order.ingredients.length - maxShownItems, 0);
 
   const onClick = (e: React.MouseEvent<HTMLDivElement>): void => {
     e.stopPropagation();
@@ -89,15 +86,17 @@ export const OrderElement: FC<TOrderData> = ({ order }) => {
 
       <div className={styles.filling}>
         <div className={styles.images_selection}>
-          {firstItems.map((item, i) => {
-            const hiddenCount = Math.max(order.ingredients.length - maxShownItems, 0);
-            const isLast = i === maxShownItems - 1;
+          {displayedIngredients.map(({ item, originalIndex }) => {
+            const isLast = originalIndex === maxShownItems - 1;
             const showCounter = hiddenCount > 0 && isLast;
 
             return (
               <li
-                key={item?._id ?? i}
-                style={{ marginLeft: i === 0 ? 0 : -16, zIndex: firstItems.length - i }}
+                key={`${item?._id ?? 'unknown'}-${originalIndex}`}
+                style={{
+                  marginLeft: originalIndex === 0 ? 0 : -16,
+                  zIndex: displayedIngredients.length - originalIndex,
+                }}
                 className={styles.image_fill}
               >
                 <img
