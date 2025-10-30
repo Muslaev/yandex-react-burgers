@@ -35,7 +35,7 @@ export const OrderStatistic: React.FC = () => {
             {doneOrders.map((done, index) => (
               <p
                 className={`text text_type_digits-default ${styles.item_done}`}
-                key={index}
+                key={done._id || index}
               >
                 {done.number}
               </p>
@@ -45,17 +45,14 @@ export const OrderStatistic: React.FC = () => {
         <div className={styles.content}>
           <p className="text text_type_main-medium mb-6">В работе:</p>
           <div className={`${styles.items} custom-scroll`}>
-            {inProgressOrders.map(
-              (inProgress, index) =>
-                !!inProgress && (
-                  <p
-                    className={`text text_type_digits-default mb-2 ${styles.item_work}`}
-                    key={index}
-                  >
-                    {inProgress.number}
-                  </p>
-                )
-            )}
+            {inProgressOrders.map((inProgress, index) => (
+              <p
+                className={`text text_type_digits-default ${styles.item_work}`}
+                key={inProgress._id || index}
+              >
+                {inProgress.number}
+              </p>
+            ))}
           </div>
         </div>
       </div>
