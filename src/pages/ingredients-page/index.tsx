@@ -1,14 +1,14 @@
 import { selectIsLoading, selectError } from '@/services/slices/ingredients';
+import { useAppSelector } from '@/utils/hooks';
 import { Preloader } from '@krgaa/react-developer-burger-ui-components';
-import { useSelector } from 'react-redux';
 
 import { IngredientDetails } from '@components/burger-ingredients/ingredient-details/ingredient-details';
 
 import styles from './ingredients-page.module.css';
 
 export const IngredientPage = (): React.JSX.Element => {
-  const isLoading = useSelector(selectIsLoading);
-  const hasError = useSelector(selectError);
+  const isLoading = useAppSelector(selectIsLoading);
+  const hasError = useAppSelector(selectError);
 
   if (isLoading) {
     return <Preloader />;

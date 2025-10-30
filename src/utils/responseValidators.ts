@@ -5,6 +5,8 @@ import type {
   TLogoutResponse,
   TPasswordResetResponse,
   TRefreshTokenResponse,
+  TOrderItem,
+  TOrderDetailsResponse,
 } from './types';
 
 type PartialIngredientsResponse = Partial<TIngredientsResponse>;
@@ -95,4 +97,39 @@ export const isPartialRefreshTokenResponse = (
   if ('refreshToken' in obj && typeof obj.refreshToken !== 'string') return false;
 
   return true;
+};
+
+export const isPartialOrderDetailsResponse = (
+  rawData: unknown
+): rawData is Partial<TOrderDetailsResponse> => {
+  if (!rawData || typeof rawData !== 'object') return false;
+  const obj = rawData as Record<string, unknown>;
+
+  if ('success' in obj && typeof obj.success !== 'boolean') return false;
+  if ('data' in obj && !Array.isArray(obj.data)) return false;
+
+  return true;
+};
+
+const isValidOrder = (order: unknown): order is TOrderItem => {
+  if (!order || typeof order !== 'object') return false;
+  const obj = order as Record<string, unknown>;
+
+  if (!('_id' in obj) || typeof obj._id !== 'string') return false;
+  if (!('name' in obj) || typeof obj.name !== 'string') return false;
+  if (!('status' in obj) || typeof obj.status !== 'string') return false;
+  if (!('number' in obj) || typeof obj.number !== 'number') return false;
+  if (!('createdAt' in obj) || typeof obj.createdAt !== 'string') return false;
+  if (!('updatedAt' in obj) || typeof obj.updatedAt !== 'string') return false;
+
+  if (!('ingredients' in obj) || !Array.isArray(obj.ingredients)) return false;
+  if (!obj.ingredients.every((ing): ing is string => typeof ing === 'string'))
+    return false;
+
+  return true;
+};
+
+export const validateOrders = (orders: unknown): TOrderItem[] => {
+  if (!Array.isArray(orders)) return [];
+  return orders.filter(isValidOrder);
 };

@@ -1,14 +1,18 @@
-.pageWrapper {
+.profileLayout {
   display: flex;
   flex-direction: row;
-  gap: 30px;
+  gap: 60px;
+  box-sizing: border-box;
   width: 100%;
-  max-width: 860px;
-  margin-left: calc(100vh - 630px);
+  max-width: 1240px;
+  margin: 0 auto;
+  margin-top: 40px;
+  padding: 0 20px;
 }
 
 .nav {
   display: flex;
+  flex-shrink: 0;
   flex-direction: column;
   gap: 24px;
   width: 320px;
@@ -25,18 +29,20 @@
 }
 
 .active {
-  color: white;
+  color: var(--text-primary-color);
 }
 
 .subtitle {
+  margin-top: 80px;
   text-align: left;
 }
 
-.formContainer {
-  /* flex: 1;
-    
-    display: flex;
-    justify-content: center;
-    align-items: flex-start; */
-  padding: 20px 0;
+.contentContainer {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  min-width: 0;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
 }

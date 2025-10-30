@@ -17,6 +17,7 @@ import {
   selectOrderNumber,
 } from '@/services/slices/order';
 import { selectIsAuthenticated } from '@/services/slices/user';
+import { useAppDispatch, useAppSelector } from '@/utils/hooks';
 import {
   Preloader,
   ConstructorElement,
@@ -25,29 +26,27 @@ import {
 } from '@krgaa/react-developer-burger-ui-components';
 import { useCallback, useMemo } from 'react';
 import { useDrop } from 'react-dnd';
-import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
+import { OrderDetails } from '../order-details/order-details';
 import { DraggableIngredient } from './draggable-ingredient/draggable-ingredient';
-import { OrderDetails } from './order-details/order-details';
 
-import type { AppDispatch } from '@services/index';
 import type { TIngredientWithCounter } from '@utils/types';
 import type { DropTargetMonitor } from 'react-dnd';
 
 import styles from './burger-constructor.module.css';
 
 export const BurgerConstructor = (): React.JSX.Element => {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
 
-  const ingredients = useSelector(selectConstructorIngredients);
-  const bun = useSelector(selectConstructorBun);
+  const ingredients = useAppSelector(selectConstructorIngredients);
+  const bun = useAppSelector(selectConstructorBun);
 
-  const orderIsLoading = useSelector(selectIsOrderLoading);
-  const orderNumber = useSelector(selectOrderNumber);
+  const orderIsLoading = useAppSelector(selectIsOrderLoading);
+  const orderNumber = useAppSelector(selectOrderNumber);
 
   const navigate = useNavigate();
-  const isAuthenticated = useSelector(selectIsAuthenticated);
+  const isAuthenticated = useAppSelector(selectIsAuthenticated);
 
   const [{ isHover }, drop] = useDrop<
     { ingredient: TIngredientWithCounter },

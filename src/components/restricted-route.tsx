@@ -2,7 +2,7 @@ import {
   selectIsAuthenticated,
   selectPasswordResetRequested,
 } from '@/services/slices/user';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '@/utils/hooks';
 import { Navigate, useLocation } from 'react-router-dom';
 
 // Определяем интерфейс для state, чтобы TypeScript знал его структуру
@@ -19,8 +19,8 @@ export function RestrictedRouteElement({
   element: React.JSX.Element;
   restrictToResetPassword?: boolean;
 }): React.JSX.Element {
-  const isAuthenticated = useSelector(selectIsAuthenticated);
-  const passwordResetRequested = useSelector(selectPasswordResetRequested);
+  const isAuthenticated = useAppSelector(selectIsAuthenticated);
+  const passwordResetRequested = useAppSelector(selectPasswordResetRequested);
   const location = useLocation();
   const state = location.state as LocationState | null;
 

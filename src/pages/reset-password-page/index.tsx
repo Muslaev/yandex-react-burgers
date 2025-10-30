@@ -1,5 +1,6 @@
 import { resetPassword } from '@/services/actions/user';
 import { selectIsUserLoading, selectUserError } from '@/services/slices/user';
+import { useAppDispatch, useAppSelector } from '@/utils/hooks';
 import {
   Button,
   Input,
@@ -7,10 +8,7 @@ import {
   Preloader,
 } from '@krgaa/react-developer-burger-ui-components';
 import { useForm, Controller } from 'react-hook-form';
-import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-
-import type { AppDispatch } from '@/services';
 
 import styles from './reset-password-page.module.css';
 
@@ -30,10 +28,10 @@ export const ResetPasswordPage: React.FC = () => {
       token: '',
     },
   });
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const isLoading = useSelector(selectIsUserLoading);
-  const error = useSelector(selectUserError);
+  const isLoading = useAppSelector(selectIsUserLoading);
+  const error = useAppSelector(selectUserError);
 
   const onSubmit = async (data: ResetPasswordForm): Promise<void> => {
     try {

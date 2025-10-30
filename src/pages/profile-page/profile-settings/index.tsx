@@ -6,6 +6,7 @@ import {
   selectIsUserLoading,
   selectUserError,
 } from '@/services/slices/user';
+import { useAppDispatch, useAppSelector } from '@/utils/hooks';
 import {
   Input,
   EmailInput,
@@ -15,9 +16,6 @@ import {
 } from '@krgaa/react-developer-burger-ui-components';
 import { useEffect, useRef, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import { useDispatch, useSelector } from 'react-redux';
-
-import type { AppDispatch } from '@/services';
 
 import styles from './profile-settings.module.css';
 
@@ -28,11 +26,11 @@ export type IProfileForm = {
 };
 
 export const ProfileSettings: React.FC = () => {
-  const user = useSelector(selectUser);
-  const initialUser = useSelector(selectInitialUser);
-  const isLoading = useSelector(selectIsUserLoading);
-  const error = useSelector(selectUserError);
-  const dispatch = useDispatch<AppDispatch>();
+  const user = useAppSelector(selectUser);
+  const initialUser = useAppSelector(selectInitialUser);
+  const isLoading = useAppSelector(selectIsUserLoading);
+  const error = useAppSelector(selectUserError);
+  const dispatch = useAppDispatch();
   const nameRef = useRef<HTMLInputElement>(null);
 
   const {
