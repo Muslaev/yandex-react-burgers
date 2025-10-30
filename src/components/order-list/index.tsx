@@ -22,13 +22,19 @@ export const OrderList: React.FC = () => {
 
   if (!isConnected || !orders) return <Preloader />;
   if (orders.length === 0)
-    return <span>Закаов пока нет, но вы можете это исправить</span>;
+    return (
+      <span className="text text_type_main-default text_color_inactive">
+        Заказов пока нет, но вы можете это исправить
+      </span>
+    );
 
   return (
-    <div className={`${styles.wrapper} custom-scroll pr-2`}>
-      {orders.map((order) => (
-        <OrderElement key={order._id} order={order} />
-      ))}
-    </div>
+    <section className={styles.container}>
+      <div className={`${styles.wrapper} mr-4`}>
+        {orders.map((order) => (
+          <OrderElement key={order._id} order={order} />
+        ))}
+      </div>
+    </section>
   );
 };

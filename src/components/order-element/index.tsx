@@ -40,9 +40,9 @@ export const OrderElement: FC<TOrderData> = ({ order }) => {
   const displayedIngredients = useMemo(() => {
     return order.ingredients.slice(0, maxShownItems).map((ingredientId, i) => {
       const item = ingredients.find((elem) => elem._id === ingredientId);
-      return { item, originalIndex: i };
+      return { item, index: i };
     });
-  }, [order.ingredients, ingredients, maxShownItems]);
+  }, [order.ingredients, ingredients]);
 
   const orderAmount = useMemo(
     () =>
@@ -63,7 +63,7 @@ export const OrderElement: FC<TOrderData> = ({ order }) => {
   };
 
   return (
-    <div onClick={onClick} className={styles.order_card}>
+    <div onClick={onClick} className={`${styles.order_card} mr-4`}>
       <div className="m-6">
         <div className={styles.order_header}>
           <p className="text text_type_digits-default">#{order.number}</p>
@@ -85,25 +85,26 @@ export const OrderElement: FC<TOrderData> = ({ order }) => {
       )}
 
       <div className={styles.filling}>
-        <div className={styles.images_selection}>
-          {displayedIngredients.map(({ item, originalIndex }) => {
-            const isLast = originalIndex === maxShownItems - 1;
-            const showCounter = hiddenCount > 0 && isLast;
+        <ul className={styles.images_selection}>
+          {displayedIngredients.map(({ item, index }, arrayIndex) => {
+            const isSixth = index === maxShownItems - 1;
+            const showCounter = hiddenCount > 0 && isSixth;
 
             return (
               <li
-                key={`${item?._id ?? 'unknown'}-${originalIndex}`}
-                style={{
-                  marginLeft: originalIndex === 0 ? 0 : -16,
-                  zIndex: displayedIngredients.length - originalIndex,
-                }}
+                key={`${item?._id ?? 'unknown'}-${index}`}
                 className={styles.image_fill}
+                style={{
+                  zIndex: displayedIngredients.length - arrayIndex,
+                  marginRight:
+                    arrayIndex < displayedIngredients.length - 1 ? '-16px' : '0',
+                }}
               >
                 <img
-                  style={{ opacity: showCounter ? 0.6 : 1 }}
                   src={item?.image_mobile}
                   alt={item?.name}
                   className={styles.image_position}
+                  style={{ opacity: showCounter ? 0.6 : 1 }}
                 />
                 {showCounter && (
                   <span className={styles.count_hidden}>+{hiddenCount}</span>
@@ -111,7 +112,7 @@ export const OrderElement: FC<TOrderData> = ({ order }) => {
               </li>
             );
           })}
-        </div>
+        </ul>
 
         <div className={styles.price}>
           <span className="text text_type_digits-default">{orderAmount}</span>

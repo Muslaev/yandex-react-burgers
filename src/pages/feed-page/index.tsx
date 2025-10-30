@@ -10,17 +10,17 @@ export const FeedPage = (): React.JSX.Element => {
 
   useWsConnection(feedWsActions);
 
-  if (!isConnected) return <p>Подключение...</p>;
+  if (!isConnected) return <p className="text text_type_main-default">Подключение...</p>;
 
   return (
-    <section className={styles.wrapper}>
-      <h1 className={`${styles.title} text text_type_main-large mt-10 mb-5 pl-5`}>
+    <>
+      <h1 className={`${styles.title} text text_type_main-large mt-10 mb-5`}>
         Лента заказов
       </h1>
       <main className={`${styles.main} pl-5 pr-5 pb-10`}>
         <OrderList />
         <OrderStatistic />
       </main>
-    </section>
+    </>
   );
 };

@@ -32,12 +32,12 @@ export const ProfilePage: React.FC = () => {
   };
 
   return (
-    <section className={`${styles.pageWrapper} mt-20`}>
-      <nav className={`${styles.nav} mr-15`}>
+    <section className={`${styles.profileLayout} mt-20`}>
+      <nav className={styles.nav}>
         <NavLink
           to="/profile"
           className={({ isActive }) =>
-            `text text_type_main-medium ${isActive ? `${styles.active}` : 'text_color_inactive'} ${styles.nav_link}`
+            `text text_type_main-medium ${isActive ? styles.active : 'text_color_inactive'} ${styles.nav_link}`
           }
           end
         >
@@ -46,7 +46,7 @@ export const ProfilePage: React.FC = () => {
         <NavLink
           to="/profile/orders"
           className={({ isActive }) =>
-            `text text_type_main-medium ${isActive ? `${styles.active}` : 'text_color_inactive'} ${styles.nav_link}`
+            `text text_type_main-medium ${isActive ? styles.active : 'text_color_inactive'} ${styles.nav_link}`
           }
         >
           История заказов
@@ -58,14 +58,14 @@ export const ProfilePage: React.FC = () => {
         >
           Выход
         </button>
-        <div className={`${styles.subtitle} pt-20`}>
-          <p className="text text_type_main-default text_color_inactive">
-            {getSubtitle()}
-          </p>
-        </div>
+        <p
+          className={`${styles.subtitle} text text_type_main-default text_color_inactive`}
+        >
+          {getSubtitle()}
+        </p>
       </nav>
 
-      <div className={styles.formContainer}>
+      <div className={styles.contentContainer}>
         <Outlet />
       </div>
     </section>
