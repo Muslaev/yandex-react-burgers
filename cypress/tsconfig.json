@@ -1,20 +1,42 @@
 {
+	"extends": "../tsconfig.json",
 	"compilerOptions": {
 		"target": "es5",
-		"lib": ["es5", "dom"],
+		"lib": [
+			"es5",
+			"dom"
+		],
 		"sourceMap": true,
 		"noEmit": true,
-		"types": ["cypress", "node"],
+		"types": [
+			"cypress",
+			"node"
+		],
 		"allowImportingTsExtensions": true,
-
+		"isolatedModules": false,
 		"baseUrl": "..",
 		"paths": {
-			"@/*": ["src/*"],
-			"@components/*": ["src/components/*"],
-			"@services/*": ["src/services/*"],
-			"@utils/*": ["src/utils/*"],
-			"@pages/*": ["src/pages/*"]
+			"@/*": [
+				"src/*"
+			],
+			"@components/*": [
+				"src/components/*"
+			],
+			"@services/*": [
+				"src/services/*"
+			],
+			"@utils/*": [
+				"src/utils/*"
+			],
+			"@pages/*": [
+				"src/pages/*"
+			]
 		}
 	},
-	"include": ["**/*.ts"]
+	"include": [
+		"../node_modules/cypress",
+		"./**/*.ts",
+		"./**/*.tsx",
+		"./**/*.d.ts"
+	]
 }

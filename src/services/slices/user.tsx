@@ -36,6 +36,7 @@ const userSlice = createSlice({
       state.errorMessage = undefined;
       state.accessToken = undefined;
       state.passwordResetRequested = false;
+      state.isLoading = false;
     },
     resetUserToInitial: (state) => {
       if (state.initialUser) {

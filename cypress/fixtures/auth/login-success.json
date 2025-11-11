@@ -1,0 +1,9 @@
+{
+    "success": true,
+    "accessToken": "Bearer mock-access-token",
+    "refreshToken": "mock-refresh-token",
+    "user": {
+        "email": "test@test.com",
+        "name": "Test User"
+    }
+}
