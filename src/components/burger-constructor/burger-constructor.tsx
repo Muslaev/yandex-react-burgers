@@ -104,18 +104,21 @@ export const BurgerConstructor = (): React.JSX.Element => {
   return (
     <>
       <section
+        data-testid="constructor-drop-target"
         className={`${styles.burger_constructor} pb-5 ${backgroundClass}`}
         ref={dropRef}
       >
         <div className={`${styles.outter} pl-6 ml-4 mr-4 mb-4`}>
           {bun ? (
-            <ConstructorElement
-              type="top"
-              isLocked={true}
-              text={bun.name + ' (верх)'}
-              price={bun.price}
-              thumbnail={bun.image}
-            />
+            <div data-testid="bun-top">
+              <ConstructorElement
+                type="top"
+                isLocked={true}
+                text={bun.name + ' (верх)'}
+                price={bun.price}
+                thumbnail={bun.image}
+              />
+            </div>
           ) : (
             <p className="text text_type_main-default text_color_inactive">
               Выберите булку
@@ -127,11 +130,13 @@ export const BurgerConstructor = (): React.JSX.Element => {
             ingredients.map((ingredient, index) => {
               if (ingredient.type === 'bun') return null;
               return (
-                <DraggableIngredient
-                  key={ingredient.key}
-                  ingredient={ingredient}
-                  index={index}
-                />
+                <div key={ingredient.key} data-testid="constructor-ingredient">
+                  <DraggableIngredient
+                    key={ingredient.key}
+                    ingredient={ingredient}
+                    index={index}
+                  />
+                </div>
               );
             })
           ) : (
@@ -143,13 +148,15 @@ export const BurgerConstructor = (): React.JSX.Element => {
 
         <div className={`${styles.outter} pl-6 ml-4 mr-4 mt-4`}>
           {bun ? (
-            <ConstructorElement
-              type="bottom"
-              isLocked={true}
-              text={bun.name + ' (низ)'}
-              price={bun.price}
-              thumbnail={bun.image}
-            />
+            <div data-testid="bun-bottom">
+              <ConstructorElement
+                type="bottom"
+                isLocked={true}
+                text={bun.name + ' (низ)'}
+                price={bun.price}
+                thumbnail={bun.image}
+              />
+            </div>
           ) : (
             <p className="text text_type_main-default text_color_inactive">
               Выберите булку

@@ -7,6 +7,8 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 export default defineConfig({
   e2e: {
     baseUrl: 'http://localhost:5173',
+    supportFile: 'cypress/support/e2e.ts',
+    specPattern: 'cypress/e2e/**/*.cy.{js,ts,jsx,tsx}',
     async setupNodeEvents(_, config) {
       const { register } = await import('ts-node');
       register({

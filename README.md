@@ -1,3 +1,5 @@
+Адрес сервера: http://muslaev.react.nomorepartiessbs.ru/
+
 Проект был изначально написан на TypeScript с использованием данного стартера.
 
 # Стартер на TypeScript для проекта Stellar Burger

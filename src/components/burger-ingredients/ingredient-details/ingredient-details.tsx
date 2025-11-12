@@ -41,31 +41,45 @@ export const IngredientDetails = (): React.JSX.Element => {
     <>
       <div className={styles.main}>
         <img alt={ingredient.name} src={ingredient.image_large} />
-        <p className={`text text_type_main-medium mt-4`}>{ingredient.name}</p>
+        <p data-testid="ingredient-name" className={`text text_type_main-medium mt-4`}>
+          {ingredient.name}
+        </p>
         <div className={`${styles.container} mt-8 mb-15`}>
           <div className={styles.element}>
             <p className="text text_type_main-small text_color_inactive">
               Калории, ккал
             </p>
-            <p className="text text_type_digits-default text_color_inactive">
+            <p
+              data-testid="modal-calories"
+              className="text text_type_digits-default text_color_inactive"
+            >
               {ingredient.calories}
             </p>
           </div>
           <div className={styles.element}>
             <p className="text text_type_main-small text_color_inactive">Белки, г</p>
-            <p className="text text_type_digits-default text_color_inactive">
+            <p
+              data-testid="modal-proteins"
+              className="text text_type_digits-default text_color_inactive"
+            >
               {ingredient.proteins}
             </p>
           </div>
           <div className={styles.element}>
             <p className="text text_type_main-small text_color_inactive">Жиры, г</p>
-            <p className="text text_type_digits-default text_color_inactive">
+            <p
+              data-testid="modal-fat"
+              className="text text_type_digits-default text_color_inactive"
+            >
               {ingredient.fat}
             </p>
           </div>
           <div className={styles.element}>
             <p className="text text_type_main-small text_color_inactive">Углеводы, г</p>
-            <p className="text text_type_digits-default text_color_inactive">
+            <p
+              data-testid="modal-carbs"
+              className="text text_type_digits-default text_color_inactive"
+            >
               {ingredient.carbohydrates}
             </p>
           </div>
