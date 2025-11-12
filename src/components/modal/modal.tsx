@@ -31,13 +31,21 @@ export const Modal = ({ header, onClose, children }: ModalProps): React.JSX.Elem
 
   return createPortal(
     <section>
-      <div onClick={(e) => e.stopPropagation()} className={styles.modal}>
+      <div
+        data-testid="modal"
+        onClick={(e) => e.stopPropagation()}
+        className={styles.modal}
+      >
         {header ? (
-          <div className={`${styles.modalHeader} ml-10 mr-10 mt-10`}>
+          <div
+            data-testid="modal-title"
+            className={`${styles.modalHeader} ml-10 mr-10 mt-10`}
+          >
             <p className="text text_type_main-large">{header}</p>
             <div className={styles.closeModalCursor}>
               <CloseIcon
                 type="primary"
+                data-testid="modal-close"
                 onClick={() => {
                   onClose();
                 }}
@@ -49,6 +57,7 @@ export const Modal = ({ header, onClose, children }: ModalProps): React.JSX.Elem
             <div className={`${styles.closeModalIcon} mr-10 mt-15`}>
               <CloseIcon
                 type="primary"
+                data-testid="modal-close"
                 onClick={() => {
                   onClose();
                 }}

@@ -41,7 +41,12 @@ export const BurgerIngredientCard = ({
   };
 
   return (
-    <div className={`${styles.ingredient_card_container}`} onClick={onClick} ref={ref}>
+    <div
+      data-testid="ingredient-card"
+      className={`${styles.ingredient_card_container}`}
+      onClick={onClick}
+      ref={ref}
+    >
       {count > 0 && <Counter count={count} />}
       <img src={ingredient.image} alt={ingredient.name} className={`${styles.image}`} />
       <div className={`${styles.price_container} mt-1 mb-1`}>

@@ -8,7 +8,10 @@ export const OrderDetails = (): React.JSX.Element => {
 
   return (
     <div>
-      <div className={`${styles.orderId} text text_type_digits-large mt-30`}>
+      <div
+        data-testid="order-number"
+        className={`${styles.orderId} text text_type_digits-large mt-30`}
+      >
         {orderNumber}
       </div>
       <div className={`${styles.text} text text_type_main-medium mt-8`}>
